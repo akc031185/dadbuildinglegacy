@@ -59,11 +59,11 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" tabIndex={-1} className="py-20 focus:outline-none" aria-labelledby="contact-heading">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 id="contact-heading" className="text-3xl md:text-4xl font-bold mb-6">
               {homeContent.contact.title}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -80,7 +80,7 @@ export function ContactForm() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium mb-2">
                       Name *
@@ -90,9 +90,12 @@ export function ContactForm() {
                       {...register("name")}
                       placeholder="Your full name"
                       className={errors.name ? "border-destructive" : ""}
+                      aria-describedby={errors.name ? "name-error" : undefined}
+                      aria-invalid={errors.name ? "true" : "false"}
+                      aria-required="true"
                     />
                     {errors.name && (
-                      <p className="text-destructive text-sm mt-1">
+                      <p id="name-error" className="text-destructive text-sm mt-1" role="alert">
                         {errors.name.message}
                       </p>
                     )}
