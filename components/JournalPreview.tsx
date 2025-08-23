@@ -1,39 +1,34 @@
 import Link from "next/link";
+import connectToDatabase from "@/lib/db";
+import Post, { IPost } from "@/models/Post";
 import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/ui/button";
 
-// Mock data - will be replaced with real data from MongoDB
-const mockPosts = [
-  {
-    _id: "1",
-    title: "Building My First AI Agent with Claude",
-    slug: "building-first-ai-agent-claude",
-    excerpt: "Documenting my journey learning to build AI agents using Claude Code and exploring how this can enhance my real estate business workflows.",
-    tags: ["ai"],
-    createdAt: "2024-12-15T00:00:00.000Z",
-    published: true
-  },
-  {
-    _id: "2", 
-    title: "Weight Loss Progress: Month 3 Update",
-    slug: "weight-loss-month-3-update",
-    excerpt: "Three months into my weight loss journey. Sharing what's working, what isn't, and the lessons learned about consistency and mindset.",
-    tags: ["health"],
-    createdAt: "2024-12-10T00:00:00.000Z",
-    published: true
-  },
-  {
-    _id: "3",
-    title: "Creative Finance Deal Analysis: Subject-To Strategy",
-    slug: "creative-finance-subject-to-analysis",
-    excerpt: "Breaking down a recent subject-to deal opportunity and the key factors I analyze when evaluating these creative finance strategies.",
-    tags: ["ai"],
-    createdAt: "2024-12-05T00:00:00.000Z",
-    published: true
-  }
-];
+async function getLatestPosts(): Promise<IPost[]> {
+  try {
+    await connectToDatabase();
+    
+    const posts = await Post.find({ published: true })
+      .sort({ createdAt: -1 })
+      .limit(3)
+      .lean()
+      .exec();
 
-export function JournalPreview() {
+    // Convert MongoDB ObjectId to string for serialization
+    return posts.map(post => ({
+      ...post,
+      _id: post._id.toString(),
+      createdAt: post.createdAt.toISOString(),
+      updatedAt: post.updatedAt.toISOString(),
+    })) as IPost[];
+  } catch (error) {
+    console.error("Error fetching latest posts:", error);
+    return [];
+  }
+}
+
+export async function JournalPreview() {
+  const posts = await getLatestPosts();
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -47,7 +42,7 @@ export function JournalPreview() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
-          {mockPosts.map((post) => (
+          {posts.map((post) => (
             <PostCard
               key={post._id}
               title={post.title}
