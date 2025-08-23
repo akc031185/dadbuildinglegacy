@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         { 
           error: "Validation failed", 
           message: "Please check your form data and try again.",
-          details: validationResult.error.errors 
+          details: validationResult.error.issues 
         },
         { status: 400 }
       );

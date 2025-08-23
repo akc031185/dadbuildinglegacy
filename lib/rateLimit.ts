@@ -80,6 +80,6 @@ function getClientIP(request: NextRequest): string {
     return cfConnectingIP;
   }
   
-  // Fallback - this might not work in all environments
-  return request.ip || "unknown";
+  // Fallback - return unknown if no IP found
+  return "unknown";
 }

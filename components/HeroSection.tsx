@@ -1,3 +1,5 @@
+"use client";
+
 import { homeContent } from "@/content/home";
 import { Button } from "@/components/ui/button";
 

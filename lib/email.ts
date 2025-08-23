@@ -27,7 +27,7 @@ function createTransporter(): nodemailer.Transporter {
     throw new Error("Missing required email configuration environment variables");
   }
 
-  return nodemailer.createTransporter(config);
+  return nodemailer.createTransport(config);
 }
 
 export async function sendContactEmail(data: ContactFormData): Promise<void> {

@@ -8,10 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
 interface PostPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
-async function getPost(slug: string): Promise<IPost | null> {
+async function getPost(slug: string): Promise<any | null> {
   try {
     await connectToDatabase();
     
@@ -29,14 +29,14 @@ async function getPost(slug: string): Promise<IPost | null> {
       _id: post._id.toString(),
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
-    } as IPost;
+    };
   } catch (error) {
     console.error("Error fetching post:", error);
     return null;
   }
 }
 
-async function getRelatedPosts(currentSlug: string, tags: string[]): Promise<IPost[]> {
+async function getRelatedPosts(currentSlug: string, tags: string[]): Promise<any[]> {
   try {
     await connectToDatabase();
     
@@ -55,7 +55,7 @@ async function getRelatedPosts(currentSlug: string, tags: string[]): Promise<IPo
       _id: post._id.toString(),
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
-    })) as IPost[];
+    }));
   } catch (error) {
     console.error("Error fetching related posts:", error);
     return [];
@@ -63,7 +63,8 @@ async function getRelatedPosts(currentSlug: string, tags: string[]): Promise<IPo
 }
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
-  const post = await getPost(params.slug);
+  const { slug } = await params;
+  const post = await getPost(slug);
 
   if (!post) {
     return {
@@ -111,7 +112,8 @@ function formatReadingTime(content: string) {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getPost(params.slug);
+  const { slug } = await params;
+  const post = await getPost(slug);
 
   if (!post) {
     notFound();
@@ -133,7 +135,7 @@ export default async function PostPage({ params }: PostPageProps) {
             </Link>
             
             <div className="flex gap-2">
-              {post.tags.map((tag) => (
+              {post.tags.map((tag: string) => (
                 <Link key={tag} href={`/journal?tag=${tag}`}>
                   <Badge variant="secondary" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
                     {tag}
@@ -152,7 +154,7 @@ export default async function PostPage({ params }: PostPageProps) {
             {/* Header */}
             <header className="mb-12">
               <div className="flex flex-wrap gap-2 mb-6">
-                {post.tags.map((tag) => (
+                {post.tags.map((tag: string) => (
                   <Link key={tag} href={`/journal?tag=${tag}`}>
                     <Badge variant="secondary" className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
                       {tag === "ai" ? "AI Tools" : "Health"}
@@ -241,10 +243,10 @@ export default async function PostPage({ params }: PostPageProps) {
               <section>
                 <h2 className="text-2xl font-semibold mb-8">Related Posts</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {relatedPosts.map((relatedPost) => (
+                  {relatedPosts.map((relatedPost: any) => (
                     <div key={relatedPost._id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
                       <div className="flex flex-wrap gap-1 mb-3">
-                        {relatedPost.tags.map((tag) => (
+                        {relatedPost.tags.map((tag: string) => (
                           <Badge key={tag} variant="secondary" className="text-xs">
                             {tag}
                           </Badge>

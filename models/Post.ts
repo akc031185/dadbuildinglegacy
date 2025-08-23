@@ -89,11 +89,6 @@ PostSchema.statics.findPublished = function(filter = {}) {
   return this.find({ ...filter, published: true }).sort({ createdAt: -1 });
 };
 
-// Static method to find posts by tag
-PostSchema.statics.findByTag = function(tag: string) {
-  return this.findPublished({ tags: tag });
-};
-
 const Post: Model<IPost> = mongoose.models.Post || mongoose.model<IPost>("Post", PostSchema);
 
 export default Post;

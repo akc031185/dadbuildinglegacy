@@ -9,10 +9,10 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
 interface JournalPageProps {
-  searchParams: { tag?: string };
+  searchParams: Promise<{ tag?: string }>;
 }
 
-async function getPosts(tag?: string): Promise<IPost[]> {
+async function getPosts(tag?: string): Promise<any[]> {
   try {
     await connectToDatabase();
     
@@ -28,7 +28,7 @@ async function getPosts(tag?: string): Promise<IPost[]> {
       _id: post._id.toString(),
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
-    })) as IPost[];
+    }));
   } catch (error) {
     console.error("Error fetching posts:", error);
     return [];
@@ -52,7 +52,7 @@ async function getPostCounts(): Promise<{ ai: number; health: number; total: num
   }
 }
 
-function PostsGrid({ posts }: { posts: IPost[] }) {
+function PostsGrid({ posts }: { posts: any[] }) {
   if (posts.length === 0) {
     return (
       <div className="text-center py-12">
@@ -85,7 +85,7 @@ function PostsGrid({ posts }: { posts: IPost[] }) {
 }
 
 export default async function JournalPage({ searchParams }: JournalPageProps) {
-  const selectedTag = searchParams.tag;
+  const { tag: selectedTag } = await searchParams;
   const [posts, counts] = await Promise.all([
     getPosts(selectedTag),
     getPostCounts()

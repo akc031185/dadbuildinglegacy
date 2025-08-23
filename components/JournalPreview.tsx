@@ -4,7 +4,7 @@ import Post, { IPost } from "@/models/Post";
 import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/ui/button";
 
-async function getLatestPosts(): Promise<IPost[]> {
+async function getLatestPosts(): Promise<any[]> {
   try {
     await connectToDatabase();
     
@@ -20,7 +20,7 @@ async function getLatestPosts(): Promise<IPost[]> {
       _id: post._id.toString(),
       createdAt: post.createdAt.toISOString(),
       updatedAt: post.updatedAt.toISOString(),
-    })) as IPost[];
+    }));
   } catch (error) {
     console.error("Error fetching latest posts:", error);
     return [];
