@@ -1,5 +1,8 @@
 import { Suspense } from "react";
 import connectToDatabase from "@/lib/db";
+
+// Force dynamic rendering to ensure fresh data from database
+export const dynamic = 'force-dynamic';
 import Post, { IPost } from "@/models/Post";
 import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/ui/button";

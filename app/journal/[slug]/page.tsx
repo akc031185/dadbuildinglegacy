@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+
+// Force dynamic rendering to ensure fresh data from database
+export const dynamic = 'force-dynamic';
 import connectToDatabase from "@/lib/db";
 import Post, { IPost } from "@/models/Post";
 import { Badge } from "@/components/ui/badge";
