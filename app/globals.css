@@ -4,48 +4,50 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    /* Gold, Green, Red/Yellow Warm Theme */
+    --background: 45 100% 98%; /* Warm cream background */
+    --foreground: 25 25% 10%; /* Dark brown text */
+    --card: 50 20% 95%; /* Light warm card */
+    --card-foreground: 25 25% 10%;
+    --popover: 50 20% 95%;
+    --popover-foreground: 25 25% 10%;
+    --primary: 45 95% 50%; /* Rich gold primary */
+    --primary-foreground: 25 25% 10%;
+    --secondary: 120 35% 45%; /* Forest green secondary */
+    --secondary-foreground: 50 20% 95%;
+    --muted: 45 40% 90%; /* Muted gold */
+    --muted-foreground: 25 15% 45%;
+    --accent: 15 80% 55%; /* Warm orange-red accent */
+    --accent-foreground: 50 20% 95%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 50 20% 95%;
+    --border: 45 30% 85%; /* Soft gold border */
+    --input: 50 20% 92%;
+    --ring: 45 95% 50%; /* Gold ring */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
+    /* Dark mode - warmer tones */
+    --background: 25 30% 8%; /* Dark brown background */
+    --foreground: 45 40% 90%; /* Light cream text */
+    --card: 25 25% 12%; /* Dark brown card */
+    --card-foreground: 45 40% 90%;
+    --popover: 25 25% 12%;
+    --popover-foreground: 45 40% 90%;
+    --primary: 45 85% 60%; /* Bright gold primary */
+    --primary-foreground: 25 30% 8%;
+    --secondary: 120 25% 35%; /* Darker green secondary */
+    --secondary-foreground: 45 40% 90%;
+    --muted: 25 20% 15%; /* Muted brown */
+    --muted-foreground: 45 20% 65%;
+    --accent: 15 70% 50%; /* Warm red accent */
+    --accent-foreground: 45 40% 90%;
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 45 40% 90%;
+    --border: 25 20% 20%; /* Soft brown border */
+    --input: 25 20% 15%;
+    --ring: 45 85% 60%; /* Gold ring */
   }
 }
 
