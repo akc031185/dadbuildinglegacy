@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { LogoIcon } from "@/components/Logo";
 
 export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,10 +40,16 @@ export function Nav() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="text-xl font-bold text-primary hover:text-primary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm"
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm"
             aria-label="Dad Building Legacy - Home"
           >
-            DBL
+            <LogoIcon size={36} className="text-primary" />
+            <span className="text-xl font-bold text-primary hidden sm:block">
+              Dad Building Legacy
+            </span>
+            <span className="text-xl font-bold text-primary sm:hidden">
+              DBL
+            </span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-8" role="menubar">
