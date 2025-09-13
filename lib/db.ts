@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { MongoClient, Db } from 'mongodb';
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
@@ -50,3 +51,41 @@ async function connectToDatabase() {
 }
 
 export default connectToDatabase;
+
+// MongoDB Native Driver Connection for API routes
+let client: MongoClient;
+let clientPromise: Promise<MongoClient>;
+
+if (process.env.NODE_ENV === 'development') {
+  // In development mode, use a global variable so that the value
+  // is preserved across module reloads caused by HMR (Hot Module Replacement).
+  let globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>
+  }
+
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(MONGODB_URI)
+    globalWithMongo._mongoClientPromise = client.connect()
+  }
+  clientPromise = globalWithMongo._mongoClientPromise
+} else {
+  // In production mode, it's best to not use a global variable.
+  client = new MongoClient(MONGODB_URI)
+  clientPromise = client.connect()
+}
+
+let cachedDb: Db | null = null
+
+export async function getDb(): Promise<Db> {
+  if (cachedDb) {
+    return cachedDb
+  }
+
+  const client = await clientPromise
+  const dbName = new URL(MONGODB_URI).pathname.slice(1) || 'dadbuildinglegacy'
+  cachedDb = client.db(dbName)
+  
+  return cachedDb
+}
+
+export { clientPromise }
