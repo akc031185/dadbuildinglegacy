@@ -36,14 +36,6 @@ const webhookTests = [
     }
   },
   {
-    name: 'Vercel Deployer',
-    url: 'https://akc031185.app.n8n.cloud/webhook/vercel-deployer',
-    payload: {
-      operation: 'list-projects',
-      projectName: 'test-project'
-    }
-  },
-  {
     name: 'GHL Opportunity',
     url: 'https://akc031185.app.n8n.cloud/webhook/ghl-opportunity',
     payload: {

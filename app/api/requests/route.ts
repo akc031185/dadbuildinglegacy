@@ -1,20 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-// Temporarily disabled for deployment
-// import { getDb } from '@/lib/db'
-// import { WebsiteRequestSchema, WebsiteRequestDb } from '@/lib/schemas'
-// import { ObjectId } from 'mongodb'
+import { getDb } from '@/lib/db'
+import { WebsiteRequestSchema, WebsiteRequestDb } from '@/lib/schemas'
+import { ObjectId } from 'mongodb'
 
 export async function POST(request: NextRequest) {
   try {
-    // Temporarily disabled for deployment
-    return NextResponse.json({
-      success: false,
-      error: "Website request submission temporarily disabled",
-      message: "Request functionality is temporarily disabled while we resolve deployment issues. Please check back soon."
-    }, { status: 503 });
-
-    // Original code commented out for deployment
-    /*
     const body = await request.json()
     
     // Validate request body
@@ -76,10 +66,21 @@ export async function POST(request: NextRequest) {
       requestId,
       message: 'Website request submitted successfully. You will receive updates via email.'
     })
-    */
     
   } catch (error) {
     console.error('API Error:', error)
+    
+    if (error instanceof Error && 'issues' in error) {
+      // Zod validation error
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Validation failed', 
+          details: (error as any).issues 
+        },
+        { status: 400 }
+      )
+    }
     
     return NextResponse.json(
       { 
@@ -97,9 +98,10 @@ async function sendIntakeConfirmation(email: string, fullName: string): Promise<
 }
 
 async function fireN8nWebhook(requestId: string, data: any): Promise<any> {
-  const webhookUrl = process.env.N8N_INTAKE_WEBHOOK_URL
+  // Use the site builder webhook as the main intake webhook
+  const webhookUrl = process.env.N8N_SITE_BUILDER_URL
   if (!webhookUrl) {
-    throw new Error('N8N_INTAKE_WEBHOOK_URL not configured')
+    throw new Error('N8N_SITE_BUILDER_URL not configured')
   }
   
   const payload = {
