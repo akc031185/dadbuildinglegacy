@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { testEmailConnection } from "@/lib/email";
+// Temporarily disabled for deployment
+// import { testEmailConnection } from "@/lib/email";
 
 export async function GET(request: NextRequest) {
   try {
+    // Temporarily disabled for deployment
+    return NextResponse.json({
+      success: false,
+      error: "Email testing temporarily disabled for deployment",
+      message: "Please check back after deployment issues are resolved"
+    }, { status: 503 });
+
+    // Original code commented out for deployment
+    /*
     // Basic authentication check (optional, for security)
     const authHeader = request.headers.get("authorization");
     const token = process.env.ADMIN_BOOTSTRAP_TOKEN;
@@ -40,6 +50,7 @@ export async function GET(request: NextRequest) {
         }
       }, { status: 500 });
     }
+    */
 
   } catch (error) {
     console.error("Email test error:", error);

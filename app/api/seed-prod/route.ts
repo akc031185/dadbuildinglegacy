@@ -1,9 +1,19 @@
 import { NextResponse } from "next/server";
-import connectToDatabase from "@/lib/db";
-import Post from "@/models/Post";
+// Temporarily disabled for deployment
+// import connectToDatabase from "@/lib/db";
+// import Post from "@/models/Post";
 
 export async function POST(request: Request) {
   try {
+    // Temporarily disabled for deployment
+    return NextResponse.json({
+      success: false,
+      error: "Database seeding temporarily disabled for deployment",
+      message: "Please check back after deployment issues are resolved"
+    }, { status: 503 });
+
+    // Original code commented out for deployment
+    /*
     // Simple auth check - require admin token
     const authHeader = request.headers.get('Authorization');
     if (authHeader !== 'Bearer dbl-admin-2024-secure-token-xyz') {
@@ -57,6 +67,7 @@ export async function POST(request: Request) {
         tags: post.tags 
       }))
     });
+    */
 
   } catch (error) {
     console.error('Seeding error:', error);

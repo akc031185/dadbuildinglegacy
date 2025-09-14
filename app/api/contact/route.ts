@@ -1,10 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import { contactFormSchema } from "@/lib/validators";
-import { sendContactEmail } from "@/lib/email";
-import { rateLimit } from "@/lib/rateLimit";
+// Temporarily disabled for deployment
+// import { contactFormSchema } from "@/lib/validators";
+// import { sendContactEmail } from "@/lib/email";
+// import { rateLimit } from "@/lib/rateLimit";
 
 export async function POST(request: NextRequest) {
   try {
+    // Temporarily disabled for deployment
+    return NextResponse.json(
+      { 
+        error: "Contact form temporarily disabled", 
+        message: "Contact functionality is temporarily disabled while we resolve deployment issues. Please check back soon." 
+      },
+      { status: 503 }
+    );
+
+    // Original code commented out for deployment
+    /*
     // Rate limiting
     const rateLimitResult = rateLimit(request);
     
@@ -73,6 +85,7 @@ export async function POST(request: NextRequest) {
         }
       }
     );
+    */
 
   } catch (error) {
     console.error("Contact form error:", error);

@@ -1,9 +1,19 @@
 import { NextResponse } from "next/server";
-import connectToDatabase from "@/lib/db";
-import Post from "@/models/Post";
+// Temporarily disabled for deployment
+// import connectToDatabase from "@/lib/db";
+// import Post from "@/models/Post";
 
 export async function GET() {
   try {
+    // Temporarily disabled for deployment
+    return NextResponse.json({
+      success: false,
+      error: "Database functionality temporarily disabled for deployment",
+      message: "Please check back after deployment issues are resolved"
+    }, { status: 503 });
+    
+    // Original code commented out for deployment
+    /*
     console.log('🔍 Debug: Attempting database connection...');
     await connectToDatabase();
     console.log('✅ Debug: Connected to database');
@@ -28,6 +38,7 @@ export async function GET() {
       count: posts.length,
       posts: serializedPosts
     });
+    */
   } catch (error) {
     console.error('❌ Debug: Error fetching posts:', error);
     return NextResponse.json({
