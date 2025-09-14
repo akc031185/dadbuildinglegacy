@@ -1,0 +1,5 @@
+# Vercel ignore file - make sure we include all necessary files
+# Don't ignore lib files
+!lib/
+!models/
+!components/

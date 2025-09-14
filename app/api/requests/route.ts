@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       .then(async (webhookResponse) => {
         // Update document with webhook response
         await collection.updateOne(
-          { _id: new ObjectId(requestId) },
+          { _id: new ObjectId(requestId) as any },
           { 
             $set: { 
               n8nWebhookFired: true, 
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
         console.error('Failed to fire n8n webhook:', error)
         // Update document with error
         await collection.updateOne(
-          { _id: new ObjectId(requestId) },
+          { _id: new ObjectId(requestId) as any },
           { 
             $set: { 
               n8nWebhookFired: false,

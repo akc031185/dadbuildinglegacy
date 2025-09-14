@@ -69,3 +69,4 @@ robots.txt
 
 # MongoDB
 *.mongodb
+.vercel
