@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDb } from '@/lib/db'
-import { WebsiteRequestSchema, WebsiteRequestDb } from '@/lib/schemas'
-import { ObjectId } from 'mongodb'
+// Temporarily disabled for deployment
+// import { getDb } from '@/lib/db'
+// import { WebsiteRequestSchema, WebsiteRequestDb } from '@/lib/schemas'
+// import { ObjectId } from 'mongodb'
 
 export async function POST(request: NextRequest) {
   try {
+    // Temporarily disabled for deployment
+    return NextResponse.json({
+      success: false,
+      error: "Website request submission temporarily disabled",
+      message: "Request functionality is temporarily disabled while we resolve deployment issues. Please check back soon."
+    }, { status: 503 });
+
+    // Original code commented out for deployment
+    /*
     const body = await request.json()
     
     // Validate request body
@@ -66,21 +76,10 @@ export async function POST(request: NextRequest) {
       requestId,
       message: 'Website request submitted successfully. You will receive updates via email.'
     })
+    */
     
   } catch (error) {
     console.error('API Error:', error)
-    
-    if (error instanceof Error && 'issues' in error) {
-      // Zod validation error
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Validation failed', 
-          details: (error as any).issues 
-        },
-        { status: 400 }
-      )
-    }
     
     return NextResponse.json(
       { 

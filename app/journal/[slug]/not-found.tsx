@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+// Temporarily disabled for deployment
+// import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
@@ -15,15 +16,11 @@ export default function NotFound() {
 
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/journal">
-              <Button>
-                Browse Journal
-              </Button>
+            <Link href="/journal" className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+              Browse Journal
             </Link>
-            <Link href="/">
-              <Button variant="outline">
-                Back to Home
-              </Button>
+            <Link href="/" className="inline-block border border-input bg-background px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+              Back to Home
             </Link>
           </div>
         </div>
