@@ -4,7 +4,17 @@ const https = require('https');
 
 const webhookTests = [
   {
-    name: 'Domain Sherpa',
+    name: 'Domain Sherpa (Test)',
+    url: 'https://akc031185.app.n8n.cloud/webhook-test/domain-sherpa',
+    payload: {
+      business: 'Tech Startup',
+      industry: 'Software Development',
+      keywords: ['tech', 'startup', 'innovation'],
+      preferredTlds: ['.com', '.io']
+    }
+  },
+  {
+    name: 'Domain Sherpa (Prod)',
     url: 'https://akc031185.app.n8n.cloud/webhook/domain-sherpa',
     payload: {
       business: 'Tech Startup',
@@ -14,7 +24,18 @@ const webhookTests = [
     }
   },
   {
-    name: 'Logo Brandsmith',
+    name: 'Logo Brandsmith (Test)',
+    url: 'https://akc031185.app.n8n.cloud/webhook-test/logo-brandsmith',
+    payload: {
+      companyName: 'Tech Innovations Inc',
+      industry: 'Technology',
+      description: 'AI-powered software solutions',
+      style: 'modern',
+      colors: ['#3B82F6', '#1E40AF']
+    }
+  },
+  {
+    name: 'Logo Brandsmith (Prod)',
     url: 'https://akc031185.app.n8n.cloud/webhook/logo-brandsmith',
     payload: {
       companyName: 'Tech Innovations Inc',
@@ -25,7 +46,18 @@ const webhookTests = [
     }
   },
   {
-    name: 'Site Builder',
+    name: 'Site Builder (Test)',
+    url: 'https://akc031185.app.n8n.cloud/webhook-test/site-builder',
+    payload: {
+      companyName: 'Tech Solutions',
+      industry: 'Software Development',
+      services: ['Web Development', 'AI Consulting'],
+      targetAudience: 'Businesses looking for digital transformation',
+      tone: 'professional'
+    }
+  },
+  {
+    name: 'Site Builder (Prod)',
     url: 'https://akc031185.app.n8n.cloud/webhook/site-builder',
     payload: {
       companyName: 'Tech Solutions',
@@ -36,7 +68,19 @@ const webhookTests = [
     }
   },
   {
-    name: 'GHL Opportunity',
+    name: 'GHL Opportunity (Test)',
+    url: 'https://akc031185.app.n8n.cloud/webhook-test/ghl-opportunity',
+    payload: {
+      contactName: 'John Doe',
+      email: 'john@example.com',
+      phone: '+1234567890',
+      companyName: 'Example Corp',
+      projectDescription: 'Need a new website',
+      budget: 10000
+    }
+  },
+  {
+    name: 'GHL Opportunity (Prod)',
     url: 'https://akc031185.app.n8n.cloud/webhook/ghl-opportunity',
     payload: {
       contactName: 'John Doe',
@@ -57,12 +101,9 @@ async function testWebhook(test) {
     const options = {
       hostname: url.hostname,
       port: 443,
-      path: url.pathname,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
-      }
+      path: url.pathname + '?' + new URLSearchParams(test.payload).toString(),
+      method: 'GET',
+      headers: {}
     };
 
     const req = https.request(options, (res) => {
@@ -89,7 +130,6 @@ async function testWebhook(test) {
       resolve({ name: test.name, status: 'ERROR', success: false, error: err.message });
     });
 
-    req.write(postData);
     req.end();
   });
 }
