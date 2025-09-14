@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// Temporarily disabled for deployment
+// import { Button } from "@/components/ui/button";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata = {
   title: "Offline - Dad Building Legacy",
@@ -11,8 +12,8 @@ export default function OfflinePage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="max-w-md mx-auto">
-        <Card>
-          <CardHeader className="text-center">
+        <div className="border rounded-lg shadow-sm">
+          <div className="p-6 text-center">
             <div className="mx-auto mb-4 w-16 h-16 bg-muted rounded-full flex items-center justify-center">
               <svg
                 className="w-8 h-8 text-muted-foreground"
@@ -28,10 +29,10 @@ export default function OfflinePage() {
                 />
               </svg>
             </div>
-            <CardTitle className="text-2xl">You're Offline</CardTitle>
-          </CardHeader>
+            <h1 className="text-2xl font-semibold mb-4">You're Offline</h1>
+          </div>
           
-          <CardContent className="text-center space-y-4">
+          <div className="p-6 text-center space-y-4">
             <p className="text-muted-foreground">
               It looks like you've lost your internet connection. Don't worry - you can still browse some cached content!
             </p>
@@ -46,16 +47,12 @@ export default function OfflinePage() {
             </div>
 
             <div className="pt-4 space-y-3">
-              <Link href="/">
-                <Button className="w-full">
-                  Go to Homepage
-                </Button>
+              <Link href="/" className="block w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+                Go to Homepage
               </Link>
               
-              <Link href="/journal">
-                <Button variant="outline" className="w-full">
-                  Browse Journal
-                </Button>
+              <Link href="/journal" className="block w-full border border-input bg-background px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                Browse Journal
               </Link>
             </div>
 
@@ -64,8 +61,8 @@ export default function OfflinePage() {
                 Your connection will be restored automatically when back online.
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Offline indicator */}
         <div className="mt-4 text-center">

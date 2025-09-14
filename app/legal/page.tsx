@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
+// Temporarily disabled for deployment
+// import { Separator } from "@/components/ui/separator";
 
 export const metadata = {
   title: "Legal Disclosures & Privacy Policy - Dad Building Legacy",
@@ -69,7 +70,7 @@ export default function LegalPage() {
               </div>
             </section>
 
-            <Separator />
+            <div className="border-t my-8"></div>
 
             {/* Lending Disclaimer */}
             <section>
@@ -114,7 +115,7 @@ export default function LegalPage() {
               </div>
             </section>
 
-            <Separator />
+            <div className="border-t my-8"></div>
 
             {/* Privacy Policy */}
             <section>
@@ -178,7 +179,7 @@ export default function LegalPage() {
               </div>
             </section>
 
-            <Separator />
+            <div className="border-t my-8"></div>
 
             {/* Contact Information */}
             <section>
@@ -197,7 +198,7 @@ export default function LegalPage() {
               </div>
             </section>
 
-            <Separator />
+            <div className="border-t my-8"></div>
 
             {/* Updates */}
             <section>

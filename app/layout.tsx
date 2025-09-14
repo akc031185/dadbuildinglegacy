@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { PWAManager } from "@/components/PWAManager";
+// Temporarily disabled for deployment
+// import { PWAManager } from "@/components/PWAManager";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -184,7 +185,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="min-h-screen bg-background">
           {children}
-          <PWAManager />
+          {/* <PWAManager /> */}
         </div>
       </body>
     </html>
