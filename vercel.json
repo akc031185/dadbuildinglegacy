@@ -57,6 +57,10 @@
   ],
   "rewrites": [
     {
+      "source": "/website-builder/:path*",
+      "destination": "https://dbl-website-builder.vercel.app/:path*"
+    },
+    {
       "source": "/robots.txt",
       "destination": "/api/robots.txt"
     }
