@@ -1,15 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable TypeScript checking (remove temporary workaround)
   typescript: {
-    // Temporarily disable TypeScript checking during build
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
-  experimental: {
-    // Enable any experimental features if needed
-  },
+  // Clean image configuration
   images: {
     domains: ["images.unsplash.com", "via.placeholder.com"],
   },
+  // Simplify headers
   async headers() {
     return [
       {
@@ -31,6 +30,6 @@ const nextConfig = {
       },
     ];
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
