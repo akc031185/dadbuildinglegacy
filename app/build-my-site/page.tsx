@@ -283,63 +283,29 @@ export default function BuildMySitePage() {
                   <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', borderBottom: '2px solid #e5e7eb', paddingBottom: '0.5rem', marginBottom: '1rem' }}>Website Details</h3>
 
                   <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Business/Website Type *</label>
-                    <select
-                      name="businessType"
-                      required
-                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem' }}
-                    >
-                      <option value="">Select business type</option>
-                      <option value="restaurant">Restaurant</option>
-                      <option value="retail">Retail Store</option>
-                      <option value="services">Professional Services</option>
-                      <option value="healthcare">Healthcare</option>
-                      <option value="real-estate">Real Estate</option>
-                      <option value="technology">Technology</option>
-                      <option value="nonprofit">Non-Profit</option>
-                      <option value="personal">Personal/Portfolio</option>
-                      <option value="blog">Blog/Content Site</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-
-                  <div style={{ marginBottom: '1rem' }}>
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Business Description & Website Purpose *</label>
                     <textarea
                       name="siteDescription"
                       required
-                      rows={4}
-                      placeholder="Describe your business and what your website should do. For example: 'ABC Construction LLC is a local contractor specializing in residential renovations. We need a website to showcase our projects, get customer inquiries, and display our services.'"
+                      rows={5}
+                      placeholder="Describe your business, what your website should do, and your target audience. For example: 'ABC Construction LLC is a local contractor specializing in residential renovations for homeowners and property investors. We need a website to showcase our projects, get customer inquiries, and display our services. Our target audience includes local homeowners looking for renovations and real estate investors seeking reliable contractors.'"
                       style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
                     />
                     <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
-                      💡 <strong>Tip:</strong> Include your company name or LLC name if you have one - we can suggest domains based on this!
+                      💡 <strong>Tip:</strong> Include your business type, company/LLC name, services, target audience, and website goals all in one description.
                     </p>
-                  </div>
-
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Target Audience *</label>
-                    <input
-                      type="text"
-                      name="targetAudience"
-                      required
-                      placeholder="e.g., Local customers, Small business owners, Young professionals"
-                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem' }}
-                    />
                   </div>
 
                   <div style={{ marginBottom: '1rem' }}>
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                      🏢 Enter Your Company Name, LLC, or Perfect Domain Name *
+                      🌐 Enter your domain/company/LLC name *
                     </label>
-                    <p style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.5rem' }}>
-                      Search using your business name, LLC name, or any domain idea. We'll show you available options with pricing.
-                    </p>
                     <input
                       type="text"
                       value={domainInput}
                       onChange={handleDomainInputChange}
                       placeholder="Enter your company name (e.g., 'ABC Construction LLC' or 'mystore')"
+                      title="Search using your business name, LLC name, or any domain idea. We'll show you available options with pricing."
                       style={{
                         width: '100%',
                         padding: '0.75rem',
