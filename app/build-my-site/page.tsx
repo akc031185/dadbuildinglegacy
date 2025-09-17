@@ -79,8 +79,11 @@ export default function BuildMySitePage() {
   const hostingMonthlyCost = 9.99
   const hostingYearlyCost = hostingMonthlyCost * 12
   const domainYearlyCost = selectedDomain?.yearlyPrice || 0
+  const domainMonthlyCost = domainYearlyCost / 12
   const totalOneTimeCost = websiteDesignCost + domainYearlyCost + hostingYearlyCost
-  const totalMonthlyCost = hostingMonthlyCost
+  const totalMonthlyCost = hostingMonthlyCost + domainMonthlyCost
+  const monthlyAfterFirstYear = hostingMonthlyCost
+  const yearlyAfterFirstYear = hostingYearlyCost + domainYearlyCost
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%)', padding: '3rem 1rem' }}>
@@ -131,10 +134,10 @@ export default function BuildMySitePage() {
                   </h3>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-                    {/* One-time Costs */}
+                    {/* First Year Costs */}
                     <div style={{ background: '#f8fafc', borderRadius: '0.5rem', padding: '1.5rem' }}>
                       <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1e3a8a', marginBottom: '1rem' }}>
-                        One-Time Setup Costs
+                        💳 First Year Costs
                       </h4>
                       <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: '#374151' }}>Website Design & Development</span>
@@ -142,16 +145,26 @@ export default function BuildMySitePage() {
                       </div>
                       <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: '#374151' }}>Domain ({selectedDomain.domain})</span>
-                        <span style={{ fontWeight: '600', color: '#111827' }}>${selectedDomain.yearlyPrice}/year</span>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontWeight: '600', color: '#111827' }}>${selectedDomain.yearlyPrice}/year</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${domainMonthlyCost.toFixed(2)}/month)</div>
+                        </div>
                       </div>
                       <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: '#374151' }}>Hosting (First Year)</span>
-                        <span style={{ fontWeight: '600', color: '#111827' }}>${hostingYearlyCost.toFixed(2)}/year</span>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontWeight: '600', color: '#111827' }}>${hostingYearlyCost.toFixed(2)}/year</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${hostingMonthlyCost}/month)</div>
+                        </div>
                       </div>
                       <div style={{ borderTop: '2px solid #e5e7eb', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.125rem', fontWeight: 'bold' }}>
                           <span style={{ color: '#111827' }}>Total First Year</span>
                           <span style={{ color: '#1e3a8a' }}>${totalOneTimeCost.toFixed(2)}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                          <span style={{ color: '#6b7280' }}>Monthly equivalent</span>
+                          <span style={{ color: '#6b7280' }}>${totalMonthlyCost.toFixed(2)}/month</span>
                         </div>
                       </div>
                     </div>
@@ -159,21 +172,55 @@ export default function BuildMySitePage() {
                     {/* Ongoing Costs */}
                     <div style={{ background: '#f0f9ff', borderRadius: '0.5rem', padding: '1.5rem' }}>
                       <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1e3a8a', marginBottom: '1rem' }}>
-                        Ongoing Monthly Costs
+                        🔄 Ongoing Costs (Year 2+)
                       </h4>
                       <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: '#374151' }}>Hosting & Maintenance</span>
-                        <span style={{ fontWeight: '600', color: '#111827' }}>${totalMonthlyCost}/month</span>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontWeight: '600', color: '#111827' }}>${hostingMonthlyCost}/month</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${hostingYearlyCost.toFixed(2)}/year)</div>
+                        </div>
                       </div>
                       <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ color: '#374151', fontSize: '0.875rem' }}>Domain Renewal</span>
-                        <span style={{ color: '#6b7280', fontSize: '0.875rem' }}>${selectedDomain.yearlyPrice}/year</span>
+                        <span style={{ color: '#374151' }}>Domain Renewal</span>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontWeight: '600', color: '#111827' }}>${domainMonthlyCost.toFixed(2)}/month</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${selectedDomain.yearlyPrice}/year)</div>
+                        </div>
                       </div>
                       <div style={{ borderTop: '2px solid #e5e7eb', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.125rem', fontWeight: 'bold' }}>
-                          <span style={{ color: '#111827' }}>Monthly After Year 1</span>
-                          <span style={{ color: '#1e3a8a' }}>${totalMonthlyCost}/month</span>
+                          <span style={{ color: '#111827' }}>Total Monthly</span>
+                          <span style={{ color: '#1e3a8a' }}>${totalMonthlyCost.toFixed(2)}/month</span>
                         </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                          <span style={{ color: '#6b7280' }}>Annual equivalent</span>
+                          <span style={{ color: '#6b7280' }}>${yearlyAfterFirstYear.toFixed(2)}/year</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 12-Month Breakdown */}
+                  <div style={{ marginTop: '2rem', background: '#fefce8', borderRadius: '0.5rem', padding: '1.5rem', border: '1px solid #fde047' }}>
+                    <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#a16207', marginBottom: '1rem', textAlign: 'center' }}>
+                      📊 12-Month Cost Summary
+                    </h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Year 1 Total</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${totalOneTimeCost.toFixed(2)}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Design + Domain + Hosting</div>
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Monthly (Year 2+)</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${totalMonthlyCost.toFixed(2)}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Hosting + Domain</div>
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Annual (Year 2+)</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${yearlyAfterFirstYear.toFixed(2)}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Yearly renewal</div>
                       </div>
                     </div>
                   </div>
