@@ -18,6 +18,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.1.13",
+    "@tailwindcss/forms": "^0.5.7",
     "autoprefixer": "^10.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -35,19 +36,18 @@
     "react-hook-form": "^7.48.2",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.2.0",
+    "@types/node": "^20.19.15",
+    "@types/nodemailer": "^6.4.19",
     "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.9.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.7",
-    "@types/node": "^20.19.15",
-    "@types/nodemailer": "^6.4.19",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.0",
-    "tsx": "^4.7.0",
-    "typescript": "^5.9.2"
+    "tsx": "^4.7.0"
   }
 }
