@@ -88,19 +88,19 @@ export default function BuildMySitePage() {
   const yearlyAfterFirstYear = hostingYearlyCost + domainYearlyCost
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%)', padding: '3rem 1rem' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%)', padding: 'clamp(1rem, 5vw, 3rem) clamp(0.5rem, 3vw, 1rem)' }}>
       <div style={{ maxWidth: '64rem', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h1 style={{ fontSize: '3rem', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>
+          <h1 style={{ fontSize: 'clamp(2rem, 8vw, 3rem)', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>
             Build My Website
           </h1>
-          <p style={{ fontSize: '1.25rem', color: '#6b7280', maxWidth: '32rem', margin: '0 auto' }}>
+          <p style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)', color: '#6b7280', maxWidth: '32rem', margin: '0 auto' }}>
             Professional website creation for your business. From domain selection to logo design,
             we'll handle everything to get your online presence up and running.
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', gap: 'clamp(1rem, 4vw, 2rem)', marginBottom: 'clamp(2rem, 6vw, 3rem)' }}>
           <div style={{ background: 'white', borderRadius: '0.5rem', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', textAlign: 'center' }}>
             <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🌐</div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Domain & Hosting</h3>
@@ -135,7 +135,7 @@ export default function BuildMySitePage() {
                     💰 Cost Breakdown
                   </h3>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: 'clamp(1rem, 4vw, 2rem)' }}>
                     {/* First Year Costs */}
                     <div style={{ background: '#f8fafc', borderRadius: '0.5rem', padding: '1.5rem' }}>
                       <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1e3a8a', marginBottom: '1rem' }}>
@@ -326,7 +326,7 @@ export default function BuildMySitePage() {
                         <p style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.75rem' }}>
                           Available domains for "{domainResults.domain}":
                         </p>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0.75rem', maxHeight: '300px', overflowY: 'auto' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', gap: '0.75rem', maxHeight: '300px', overflowY: 'auto' }}>
                           {domainResults.results
                             .filter(option => option.available)
                             .sort((a, b) => (b.popular ? 1 : 0) - (a.popular ? 1 : 0))
@@ -548,7 +548,7 @@ export default function BuildMySitePage() {
         <div style={{ marginTop: '3rem', textAlign: 'center' }}>
           <div style={{ background: 'white', borderRadius: '0.5rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}>
             <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>What Happens Next?</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', textAlign: 'left' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', gap: 'clamp(1rem, 4vw, 1.5rem)', textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                 <div style={{ flexShrink: 0, width: '2rem', height: '2rem', background: '#2563eb', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>1</div>
                 <div>

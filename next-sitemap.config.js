@@ -15,6 +15,8 @@ module.exports = {
     // Custom priority for different pages
     const priorities = {
       '/': 1.0,
+      '/build-my-site': 0.95,
+      '/website-request': 0.9,
       '/journal': 0.9,
       '/legal': 0.5
     };
@@ -22,6 +24,8 @@ module.exports = {
     // Higher frequency for journal pages
     const changefreqs = {
       '/': 'weekly',
+      '/build-my-site': 'weekly',
+      '/website-request': 'weekly',
       '/journal': 'weekly',
       '/legal': 'monthly'
     };
