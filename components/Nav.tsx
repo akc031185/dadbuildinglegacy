@@ -76,6 +76,13 @@ export function Nav() {
             >
               Journal
             </Link>
+            <Link
+              href="/website-request"
+              className="text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm px-2 py-1"
+              role="menuitem"
+            >
+              Website
+            </Link>
             <button
               onClick={() => scrollToSection("contact")}
               className="text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm px-2 py-1"
