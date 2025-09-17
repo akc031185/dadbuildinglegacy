@@ -26,8 +26,10 @@ export default function BuildMySitePage() {
   const [isSearching, setIsSearching] = useState(false)
   const [isClient, setIsClient] = useState(false)
   const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null)
-  const [logoOption, setLogoOption] = useState('')
-  const [logoPrompt, setLogoPrompt] = useState('')
+  const [logoInput, setLogoInput] = useState('')
+  const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [logoPreview, setLogoPreview] = useState<string | null>(null)
+  const [logoAction, setLogoAction] = useState<'generate' | 'upload' | null>(null)
 
   useEffect(() => {
     setIsClient(true)
@@ -74,6 +76,37 @@ export default function BuildMySitePage() {
 
   const selectDomain = (domain: DomainOption) => {
     setSelectedDomain(domain)
+  }
+
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setLogoFile(file)
+      // Create preview URL
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setLogoPreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+      setLogoAction('upload')
+    }
+  }
+
+  const handleLogoGenerate = () => {
+    if (logoInput.trim()) {
+      setLogoAction('generate')
+      // Here you would typically call your AI logo generation API
+      console.log('Generating logo with prompt:', logoInput)
+    }
+  }
+
+  const handleLogoInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setLogoInput(e.target.value)
+    // Reset file selection if user starts typing
+    if (e.target.value.trim()) {
+      setLogoFile(null)
+      setLogoPreview(null)
+    }
   }
 
   // Calculate costs
@@ -399,111 +432,159 @@ export default function BuildMySitePage() {
                 </div>
 
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', borderBottom: '2px solid #e5e7eb', paddingBottom: '0.5rem', marginBottom: '1rem' }}>Logo Preference</h3>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', borderBottom: '2px solid #e5e7eb', paddingBottom: '0.5rem', marginBottom: '1rem' }}>
+                    🎨 Logo Creation
+                  </h3>
 
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.75rem' }}>Logo Option *</label>
-                    <div style={{ marginBottom: '0.75rem' }}>
-                      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer' }}>
-                        <input
-                          type="radio"
-                          name="logoOption"
-                          value="existing"
-                          required
-                          style={{ marginTop: '0.25rem' }}
-                          onChange={(e) => setLogoOption(e.target.value)}
-                        />
-                        <div>
-                          <div style={{ fontWeight: '500', color: '#111827' }}>I have an existing logo</div>
-                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>I'll provide my current logo files</div>
-                        </div>
-                      </label>
-                    </div>
+                  <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.75rem' }}>
+                      Describe your logo or upload an existing one *
+                    </label>
 
-                    <div style={{ marginBottom: '0.75rem' }}>
-                      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: logoOption === 'ai-generate' ? '2px solid #2563eb' : '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer', background: logoOption === 'ai-generate' ? '#eff6ff' : 'transparent' }}>
-                        <input
-                          type="radio"
-                          name="logoOption"
-                          value="ai-generate"
-                          required
-                          style={{ marginTop: '0.25rem' }}
-                          onChange={(e) => setLogoOption(e.target.value)}
-                        />
-                        <div>
-                          <div style={{ fontWeight: '500', color: '#111827' }}>🤖 Generate logo with AI</div>
-                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Create a unique logo using AI based on your description or uploaded image</div>
-                        </div>
-                      </label>
-                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <textarea
+                        value={logoInput}
+                        onChange={handleLogoInputChange}
+                        name="logoDescription"
+                        rows={4}
+                        placeholder="Describe your ideal logo (e.g., 'Modern minimalist logo for ABC Construction LLC with a hammer and house icon, blue and gray colors, professional feel') OR paste a link to your existing logo..."
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          resize: 'none',
+                          marginBottom: '0.75rem'
+                        }}
+                      />
 
-                    {logoOption === 'ai-generate' && (
-                      <div style={{ marginBottom: '0.75rem', padding: '1rem', background: '#f8fafc', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
-                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                          🎨 Describe your ideal logo
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        marginBottom: '1rem',
+                        fontSize: '0.875rem',
+                        color: '#6b7280'
+                      }}>
+                        <span>OR</span>
+                        <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
+                      </div>
+
+                      <div style={{ marginBottom: '1rem' }}>
+                        <label
+                          htmlFor="logoFile"
+                          style={{
+                            display: 'inline-block',
+                            padding: '0.75rem 1rem',
+                            background: 'white',
+                            border: '2px dashed #d1d5db',
+                            borderRadius: '0.5rem',
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                            width: '100%',
+                            transition: 'all 0.2s',
+                            fontSize: '0.875rem',
+                            color: '#374151'
+                          }}
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={(e) => {
+                            e.preventDefault()
+                            const files = e.dataTransfer.files
+                            if (files[0]) {
+                              const syntheticEvent = {
+                                target: { files: [files[0]] }
+                              } as any
+                              handleFileUpload(syntheticEvent)
+                            }
+                          }}
+                        >
+                          📁 Click to upload or drag & drop your existing logo
+                          <br />
+                          <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                            PNG, JPG, SVG, or PDF (max 5MB)
+                          </span>
                         </label>
-                        <textarea
-                          value={logoPrompt}
-                          onChange={(e) => setLogoPrompt(e.target.value)}
-                          name="logoPrompt"
-                          rows={3}
-                          placeholder="Describe your logo idea... (e.g., 'Modern minimalist logo for ABC Construction LLC with a hammer and house icon, blue and gray colors, professional feel')"
-                          style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
+                        <input
+                          id="logoFile"
+                          type="file"
+                          onChange={handleFileUpload}
+                          accept="image/*,.pdf"
+                          style={{ display: 'none' }}
                         />
-                        <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>
-                          💡 <strong>Tip:</strong> Include your business name, preferred colors, style (modern, vintage, etc.), and any symbols or icons you'd like
-                        </p>
+                      </div>
 
-                        <div style={{ marginTop: '1rem' }}>
-                          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                            📸 Or upload reference image (optional)
-                          </label>
-                          <input
-                            type="file"
-                            name="logoReference"
-                            accept="image/*"
-                            style={{ width: '100%', padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '0.875rem' }}
+                      {logoPreview && (
+                        <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+                          <img
+                            src={logoPreview}
+                            alt="Logo preview"
+                            style={{
+                              maxWidth: '200px',
+                              maxHeight: '100px',
+                              borderRadius: '0.5rem',
+                              border: '1px solid #e5e7eb'
+                            }}
                           />
-                          <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
-                            Upload an image for AI to use as inspiration or reference
+                          <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>
+                            ✅ Logo uploaded successfully
                           </p>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    <div style={{ marginBottom: '0.75rem' }}>
-                      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer' }}>
-                        <input
-                          type="radio"
-                          name="logoOption"
-                          value="create-new"
-                          required
-                          style={{ marginTop: '0.25rem' }}
-                          onChange={(e) => setLogoOption(e.target.value)}
-                        />
-                        <div>
-                          <div style={{ fontWeight: '500', color: '#111827' }}>Create a new logo for me (manual design)</div>
-                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Our designers will create a custom logo based on your business</div>
+                      <button
+                        type="button"
+                        onClick={handleLogoGenerate}
+                        disabled={!logoInput.trim() && !logoFile}
+                        style={{
+                          width: '100%',
+                          padding: '0.875rem',
+                          background: (logoInput.trim() || logoFile) ? '#2563eb' : '#9ca3af',
+                          color: 'white',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontWeight: '600',
+                          border: 'none',
+                          cursor: (logoInput.trim() || logoFile) ? 'pointer' : 'not-allowed',
+                          transition: 'all 0.2s',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.5rem'
+                        }}
+                      >
+                        {logoFile ? '📁 Add Existing Logo' : '🤖 Generate Logo with AI'}
+                      </button>
+
+                      {logoAction && (
+                        <div style={{
+                          marginTop: '1rem',
+                          padding: '0.75rem',
+                          background: logoAction === 'generate' ? '#ecfdf5' : '#eff6ff',
+                          borderRadius: '0.5rem',
+                          border: `1px solid ${logoAction === 'generate' ? '#a7f3d0' : '#bfdbfe'}`,
+                          fontSize: '0.875rem'
+                        }}>
+                          {logoAction === 'generate' ? (
+                            <span style={{ color: '#065f46' }}>
+                              ✨ <strong>AI Logo Generation:</strong> We'll create a custom logo based on your description: "{logoInput}"
+                            </span>
+                          ) : (
+                            <span style={{ color: '#1e40af' }}>
+                              📁 <strong>Existing Logo:</strong> We'll use your uploaded logo file for your website
+                            </span>
+                          )}
                         </div>
-                      </label>
+                      )}
                     </div>
 
-                    <div>
-                      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer' }}>
-                        <input
-                          type="radio"
-                          name="logoOption"
-                          value="text-only"
-                          required
-                          style={{ marginTop: '0.25rem' }}
-                          onChange={(e) => setLogoOption(e.target.value)}
-                        />
-                        <div>
-                          <div style={{ fontWeight: '500', color: '#111827' }}>Use text-only logo</div>
-                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Simple text-based branding</div>
-                        </div>
-                      </label>
-                    </div>
+                    <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0 }}>
+                      💡 <strong>Tip:</strong> For AI generation, include your business name, preferred colors, style (modern, vintage, etc.), and any symbols or icons you'd like
+                    </p>
+
+                    {/* Hidden inputs for form submission */}
+                    <input type="hidden" name="logoAction" value={logoAction || ''} />
+                    <input type="hidden" name="logoDescription" value={logoInput} />
                   </div>
                 </div>
 
