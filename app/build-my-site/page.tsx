@@ -26,6 +26,8 @@ export default function BuildMySitePage() {
   const [isSearching, setIsSearching] = useState(false)
   const [isClient, setIsClient] = useState(false)
   const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [logoOption, setLogoOption] = useState('')
+  const [logoPrompt, setLogoPrompt] = useState('')
 
   useEffect(() => {
     setIsClient(true)
@@ -281,14 +283,63 @@ export default function BuildMySitePage() {
                   <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', borderBottom: '2px solid #e5e7eb', paddingBottom: '0.5rem', marginBottom: '1rem' }}>Website Details</h3>
 
                   <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Business/Website Type *</label>
+                    <select
+                      name="businessType"
+                      required
+                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem' }}
+                    >
+                      <option value="">Select business type</option>
+                      <option value="restaurant">Restaurant</option>
+                      <option value="retail">Retail Store</option>
+                      <option value="services">Professional Services</option>
+                      <option value="healthcare">Healthcare</option>
+                      <option value="real-estate">Real Estate</option>
+                      <option value="technology">Technology</option>
+                      <option value="nonprofit">Non-Profit</option>
+                      <option value="personal">Personal/Portfolio</option>
+                      <option value="blog">Blog/Content Site</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Business Description & Website Purpose *</label>
+                    <textarea
+                      name="siteDescription"
+                      required
+                      rows={4}
+                      placeholder="Describe your business and what your website should do. For example: 'ABC Construction LLC is a local contractor specializing in residential renovations. We need a website to showcase our projects, get customer inquiries, and display our services.'"
+                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
+                    />
+                    <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                      💡 <strong>Tip:</strong> Include your company name or LLC name if you have one - we can suggest domains based on this!
+                    </p>
+                  </div>
+
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Target Audience *</label>
+                    <input
+                      type="text"
+                      name="targetAudience"
+                      required
+                      placeholder="e.g., Local customers, Small business owners, Young professionals"
+                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem' }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: '1rem' }}>
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                      🔍 Search for Your Perfect Domain Name *
+                      🏢 Enter Your Company Name, LLC, or Perfect Domain Name *
                     </label>
+                    <p style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.5rem' }}>
+                      Search using your business name, LLC name, or any domain idea. We'll show you available options with pricing.
+                    </p>
                     <input
                       type="text"
                       value={domainInput}
                       onChange={handleDomainInputChange}
-                      placeholder="Enter your desired domain name..."
+                      placeholder="Enter your company name (e.g., 'ABC Construction LLC' or 'mystore')"
                       style={{
                         width: '100%',
                         padding: '0.75rem',
@@ -379,49 +430,6 @@ export default function BuildMySitePage() {
                       value={selectedDomain?.domain || ''}
                     />
                   </div>
-
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Business/Website Type *</label>
-                    <select
-                      name="businessType"
-                      required
-                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem' }}
-                    >
-                      <option value="">Select business type</option>
-                      <option value="restaurant">Restaurant</option>
-                      <option value="retail">Retail Store</option>
-                      <option value="services">Professional Services</option>
-                      <option value="healthcare">Healthcare</option>
-                      <option value="real-estate">Real Estate</option>
-                      <option value="technology">Technology</option>
-                      <option value="nonprofit">Non-Profit</option>
-                      <option value="personal">Personal/Portfolio</option>
-                      <option value="blog">Blog/Content Site</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Site Description & Main Functionality *</label>
-                    <textarea
-                      name="siteDescription"
-                      required
-                      rows={4}
-                      placeholder="Describe what your website should do and what your business/application is about. For example: 'A local bakery website that showcases our products, allows online ordering, and shows our location and hours.'"
-                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
-                    />
-                  </div>
-
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Target Audience *</label>
-                    <input
-                      type="text"
-                      name="targetAudience"
-                      required
-                      placeholder="e.g., Local customers, Small business owners, Young professionals"
-                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem' }}
-                    />
-                  </div>
                 </div>
 
                 <div style={{ marginBottom: '1.5rem' }}>
@@ -431,7 +439,14 @@ export default function BuildMySitePage() {
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.75rem' }}>Logo Option *</label>
                     <div style={{ marginBottom: '0.75rem' }}>
                       <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer' }}>
-                        <input type="radio" name="logoOption" value="existing" required style={{ marginTop: '0.25rem' }} />
+                        <input
+                          type="radio"
+                          name="logoOption"
+                          value="existing"
+                          required
+                          style={{ marginTop: '0.25rem' }}
+                          onChange={(e) => setLogoOption(e.target.value)}
+                        />
                         <div>
                           <div style={{ fontWeight: '500', color: '#111827' }}>I have an existing logo</div>
                           <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>I'll provide my current logo files</div>
@@ -440,18 +455,83 @@ export default function BuildMySitePage() {
                     </div>
 
                     <div style={{ marginBottom: '0.75rem' }}>
-                      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer' }}>
-                        <input type="radio" name="logoOption" value="create-new" required style={{ marginTop: '0.25rem' }} />
+                      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: logoOption === 'ai-generate' ? '2px solid #2563eb' : '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer', background: logoOption === 'ai-generate' ? '#eff6ff' : 'transparent' }}>
+                        <input
+                          type="radio"
+                          name="logoOption"
+                          value="ai-generate"
+                          required
+                          style={{ marginTop: '0.25rem' }}
+                          onChange={(e) => setLogoOption(e.target.value)}
+                        />
                         <div>
-                          <div style={{ fontWeight: '500', color: '#111827' }}>Create a new logo for me</div>
-                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Design a custom logo based on my business</div>
+                          <div style={{ fontWeight: '500', color: '#111827' }}>🤖 Generate logo with AI</div>
+                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Create a unique logo using AI based on your description or uploaded image</div>
+                        </div>
+                      </label>
+                    </div>
+
+                    {logoOption === 'ai-generate' && (
+                      <div style={{ marginBottom: '0.75rem', padding: '1rem', background: '#f8fafc', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                          🎨 Describe your ideal logo
+                        </label>
+                        <textarea
+                          value={logoPrompt}
+                          onChange={(e) => setLogoPrompt(e.target.value)}
+                          name="logoPrompt"
+                          rows={3}
+                          placeholder="Describe your logo idea... (e.g., 'Modern minimalist logo for ABC Construction LLC with a hammer and house icon, blue and gray colors, professional feel')"
+                          style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
+                        />
+                        <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>
+                          💡 <strong>Tip:</strong> Include your business name, preferred colors, style (modern, vintage, etc.), and any symbols or icons you'd like
+                        </p>
+
+                        <div style={{ marginTop: '1rem' }}>
+                          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                            📸 Or upload reference image (optional)
+                          </label>
+                          <input
+                            type="file"
+                            name="logoReference"
+                            accept="image/*"
+                            style={{ width: '100%', padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '0.875rem' }}
+                          />
+                          <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                            Upload an image for AI to use as inspiration or reference
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div style={{ marginBottom: '0.75rem' }}>
+                      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer' }}>
+                        <input
+                          type="radio"
+                          name="logoOption"
+                          value="create-new"
+                          required
+                          style={{ marginTop: '0.25rem' }}
+                          onChange={(e) => setLogoOption(e.target.value)}
+                        />
+                        <div>
+                          <div style={{ fontWeight: '500', color: '#111827' }}>Create a new logo for me (manual design)</div>
+                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Our designers will create a custom logo based on your business</div>
                         </div>
                       </label>
                     </div>
 
                     <div>
                       <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem', cursor: 'pointer' }}>
-                        <input type="radio" name="logoOption" value="text-only" required style={{ marginTop: '0.25rem' }} />
+                        <input
+                          type="radio"
+                          name="logoOption"
+                          value="text-only"
+                          required
+                          style={{ marginTop: '0.25rem' }}
+                          onChange={(e) => setLogoOption(e.target.value)}
+                        />
                         <div>
                           <div style={{ fontWeight: '500', color: '#111827' }}>Use text-only logo</div>
                           <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Simple text-based branding</div>
