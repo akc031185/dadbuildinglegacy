@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "postinstall": "echo 'TypeScript dependencies installed'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
