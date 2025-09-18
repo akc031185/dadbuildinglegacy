@@ -321,11 +321,12 @@ export default function BuildMySitePage() {
                       name="siteDescription"
                       required
                       rows={5}
-                      placeholder="Describe your business, what your website should do, and your target audience. For example: 'ABC Construction LLC is a local contractor specializing in residential renovations for homeowners and property investors. We need a website to showcase our projects, get customer inquiries, and display our services. Our target audience includes local homeowners looking for renovations and real estate investors seeking reliable contractors.'"
+                      placeholder="Describe your business, what your website should do, and your target audience. For example: 'ABC Construction LLC is a local contractor specializing in residential renovations for homeowners and property investors. We need a website to showcase our projects, get customer inquiries, and display our services. Our target audience includes local homeowners looking for renovations and real estate investors seeking reliable contractors.' OR paste a link to an existing site you'd like to replicate: 'Build a site exactly like https://example.com'"
+                      title="Describe your business and website goals, OR paste a URL of an existing website you'd like to replicate"
                       style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
                     />
                     <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
-                      💡 <strong>Tip:</strong> Include your business type, company/LLC name, services, target audience, and website goals all in one description.
+                      💡 <strong>Tip:</strong> Include your business type, company/LLC name, services, target audience, and website goals. <strong>Or simply paste a URL</strong> of an existing website you'd like to replicate (e.g., "Build exactly like https://example.com").
                     </p>
                   </div>
 
