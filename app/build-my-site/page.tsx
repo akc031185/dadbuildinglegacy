@@ -30,6 +30,10 @@ export default function BuildMySitePage() {
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [logoAction, setLogoAction] = useState<'generate' | 'upload' | null>(null)
+  const [isGeneratingLogos, setIsGeneratingLogos] = useState(false)
+  const [generatedLogos, setGeneratedLogos] = useState<string[]>([])
+  const [selectedLogoIndex, setSelectedLogoIndex] = useState<number | null>(null)
+  const [showMoreLogos, setShowMoreLogos] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
@@ -92,12 +96,30 @@ export default function BuildMySitePage() {
     }
   }
 
-  const handleLogoGenerate = () => {
+  const handleLogoGenerate = async () => {
     if (logoInput.trim()) {
+      setIsGeneratingLogos(true)
       setLogoAction('generate')
-      // Here you would typically call your AI logo generation API
-      console.log('Generating logo with prompt:', logoInput)
+
+      // Simulate AI logo generation (replace with actual API call)
+      setTimeout(() => {
+        // Mock generated logo URLs - in production, these would come from your AI API
+        const mockLogos = [
+          `https://via.placeholder.com/200x100/2563eb/ffffff?text=Logo+1`,
+          `https://via.placeholder.com/200x100/059669/ffffff?text=Logo+2`,
+          `https://via.placeholder.com/200x100/dc2626/ffffff?text=Logo+3`,
+          `https://via.placeholder.com/200x100/7c3aed/ffffff?text=Logo+4`,
+          `https://via.placeholder.com/200x100/ea580c/ffffff?text=Logo+5`,
+          `https://via.placeholder.com/200x100/0891b2/ffffff?text=Logo+6`
+        ]
+        setGeneratedLogos(mockLogos)
+        setIsGeneratingLogos(false)
+      }, 2000) // 2 second simulation
     }
+  }
+
+  const selectLogo = (index: number) => {
+    setSelectedLogoIndex(index)
   }
 
   const handleLogoInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -557,24 +579,149 @@ export default function BuildMySitePage() {
                         {logoFile ? '📁 Add Existing Logo' : '🤖 Generate Logo with AI'}
                       </button>
 
-                      {logoAction && (
+                      {isGeneratingLogos && (
+                        <div style={{
+                          marginTop: '1rem',
+                          padding: '1rem',
+                          background: '#f0f9ff',
+                          borderRadius: '0.5rem',
+                          border: '1px solid #bfdbfe',
+                          textAlign: 'center'
+                        }}>
+                          <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🤖</div>
+                          <div style={{ color: '#1e40af', fontWeight: '500' }}>Generating AI logos...</div>
+                          <div style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                            Creating custom logos based on: "{logoInput}"
+                          </div>
+                        </div>
+                      )}
+
+                      {generatedLogos.length > 0 && !isGeneratingLogos && (
+                        <div style={{ marginTop: '1rem' }}>
+                          <div style={{
+                            padding: '1rem',
+                            background: '#ecfdf5',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #a7f3d0',
+                            marginBottom: '1rem'
+                          }}>
+                            <div style={{ color: '#065f46', fontWeight: '500', marginBottom: '0.5rem' }}>
+                              ✨ AI Generated Logos - Choose your favorite:
+                            </div>
+                            <div style={{ fontSize: '0.875rem', color: '#047857' }}>
+                              Based on: "{logoInput}"
+                            </div>
+                          </div>
+
+                          <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                            gap: '1rem',
+                            marginBottom: '1rem'
+                          }}>
+                            {generatedLogos.slice(0, showMoreLogos ? 6 : 3).map((logoUrl, index) => (
+                              <div
+                                key={index}
+                                onClick={() => selectLogo(index)}
+                                style={{
+                                  cursor: 'pointer',
+                                  padding: '1rem',
+                                  border: selectedLogoIndex === index ? '3px solid #2563eb' : '2px solid #e5e7eb',
+                                  borderRadius: '0.75rem',
+                                  background: selectedLogoIndex === index ? '#eff6ff' : 'white',
+                                  transition: 'all 0.2s',
+                                  textAlign: 'center',
+                                  position: 'relative'
+                                }}
+                              >
+                                <img
+                                  src={logoUrl}
+                                  alt={`Generated logo option ${index + 1}`}
+                                  style={{
+                                    width: '100%',
+                                    height: '80px',
+                                    objectFit: 'contain',
+                                    borderRadius: '0.5rem',
+                                    background: '#f9fafb'
+                                  }}
+                                />
+                                <div style={{
+                                  marginTop: '0.5rem',
+                                  fontSize: '0.875rem',
+                                  fontWeight: '500',
+                                  color: selectedLogoIndex === index ? '#2563eb' : '#374151'
+                                }}>
+                                  Option {index + 1}
+                                </div>
+                                {selectedLogoIndex === index && (
+                                  <div style={{
+                                    position: 'absolute',
+                                    top: '0.5rem',
+                                    right: '0.5rem',
+                                    width: '1.5rem',
+                                    height: '1.5rem',
+                                    borderRadius: '50%',
+                                    background: '#2563eb',
+                                    color: 'white',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '0.75rem'
+                                  }}>
+                                    ✓
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+
+                          {generatedLogos.length > 3 && (
+                            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                              <button
+                                type="button"
+                                onClick={() => setShowMoreLogos(!showMoreLogos)}
+                                style={{
+                                  padding: '0.5rem 1rem',
+                                  background: '#f3f4f6',
+                                  border: '1px solid #d1d5db',
+                                  borderRadius: '0.5rem',
+                                  fontSize: '0.875rem',
+                                  cursor: 'pointer',
+                                  color: '#374151'
+                                }}
+                              >
+                                {showMoreLogos ? 'Show Less Options' : 'Show More Options (3 more)'}
+                              </button>
+                            </div>
+                          )}
+
+                          {selectedLogoIndex !== null && (
+                            <div style={{
+                              padding: '0.75rem',
+                              background: '#eff6ff',
+                              borderRadius: '0.5rem',
+                              border: '1px solid #bfdbfe',
+                              fontSize: '0.875rem',
+                              color: '#1e40af'
+                            }}>
+                              ✅ <strong>Selected:</strong> Logo Option {selectedLogoIndex + 1} - This will be used for your website
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {logoAction === 'upload' && logoFile && (
                         <div style={{
                           marginTop: '1rem',
                           padding: '0.75rem',
-                          background: logoAction === 'generate' ? '#ecfdf5' : '#eff6ff',
+                          background: '#eff6ff',
                           borderRadius: '0.5rem',
-                          border: `1px solid ${logoAction === 'generate' ? '#a7f3d0' : '#bfdbfe'}`,
+                          border: '1px solid #bfdbfe',
                           fontSize: '0.875rem'
                         }}>
-                          {logoAction === 'generate' ? (
-                            <span style={{ color: '#065f46' }}>
-                              ✨ <strong>AI Logo Generation:</strong> We'll create a custom logo based on your description: "{logoInput}"
-                            </span>
-                          ) : (
-                            <span style={{ color: '#1e40af' }}>
-                              📁 <strong>Existing Logo:</strong> We'll use your uploaded logo file for your website
-                            </span>
-                          )}
+                          <span style={{ color: '#1e40af' }}>
+                            📁 <strong>Existing Logo:</strong> We'll use your uploaded logo file for your website
+                          </span>
                         </div>
                       )}
                     </div>
@@ -586,6 +733,8 @@ export default function BuildMySitePage() {
                     {/* Hidden inputs for form submission */}
                     <input type="hidden" name="logoAction" value={logoAction || ''} />
                     <input type="hidden" name="logoDescription" value={logoInput} />
+                    <input type="hidden" name="selectedLogoIndex" value={selectedLogoIndex !== null ? selectedLogoIndex.toString() : ''} />
+                    <input type="hidden" name="selectedLogoUrl" value={selectedLogoIndex !== null ? generatedLogos[selectedLogoIndex] : ''} />
                   </div>
                 </div>
 
