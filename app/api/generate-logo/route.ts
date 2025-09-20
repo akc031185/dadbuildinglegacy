@@ -197,8 +197,13 @@ async function generateHuggingFaceLogos(companyName: string, businessType: strin
 }
 
 export async function POST(request: NextRequest) {
+  let businessDescription = ''
+  let companyName = ''
+
   try {
-    const { businessDescription, companyName } = await request.json()
+    const body = await request.json()
+    businessDescription = body.businessDescription || ''
+    companyName = body.companyName || ''
 
     if (!businessDescription && !companyName) {
       return NextResponse.json(
@@ -207,13 +212,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const extractedName = extractCompanyName(businessDescription || '', companyName || '')
-    const businessType = determineBusinessType(businessDescription || '')
+    const extractedName = extractCompanyName(businessDescription, companyName)
+    const businessType = determineBusinessType(businessDescription)
 
     console.log(`Generating AI logos for "${extractedName}" (${businessType} industry)`)
 
     // Generate logos using Hugging Face open source models
-    const aiLogos = await generateHuggingFaceLogos(extractedName, businessType, businessDescription || '')
+    const aiLogos = await generateHuggingFaceLogos(extractedName, businessType, businessDescription)
 
     const successfulLogos = aiLogos.filter(logo => !logo.fallback)
     const fallbackCount = aiLogos.length - successfulLogos.length
@@ -233,8 +238,8 @@ export async function POST(request: NextRequest) {
     console.error('Logo generation error:', error)
 
     // Complete fallback system - Generate SVG logos server-side
-    const extractedName = extractCompanyName(businessDescription || '', companyName || '')
-    const businessType = determineBusinessType(businessDescription || '')
+    const extractedName = extractCompanyName(businessDescription, companyName)
+    const businessType = determineBusinessType(businessDescription)
 
     const fallbackLogos = generateSVGLogos(extractedName, businessType)
 
