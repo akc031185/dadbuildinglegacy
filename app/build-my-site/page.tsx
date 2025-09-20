@@ -101,20 +101,50 @@ export default function BuildMySitePage() {
       setIsGeneratingLogos(true)
       setLogoAction('generate')
 
-      // Simulate AI logo generation (replace with actual API call)
-      setTimeout(() => {
-        // Mock generated logo URLs - in production, these would come from your AI API
+      try {
+        const response = await fetch('/api/generate-logo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            businessDescription: logoInput,
+            companyName: domainInput,
+            logoStyle: 'modern',
+            colors: ['#2563eb', '#ffffff']
+          })
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          if (data.success && data.logos) {
+            const logoUrls = data.logos.map((logo: any) => logo.url)
+            setGeneratedLogos(logoUrls)
+          } else {
+            console.error('Logo generation failed:', data.error)
+            // Fallback to mock logos if API fails
+            const mockLogos = [
+              `https://via.placeholder.com/300x300/2563eb/ffffff?text=${encodeURIComponent(domainInput || 'Logo 1')}`,
+              `https://via.placeholder.com/300x300/059669/ffffff?text=${encodeURIComponent(domainInput || 'Logo 2')}`,
+              `https://via.placeholder.com/300x300/dc2626/ffffff?text=${encodeURIComponent(domainInput || 'Logo 3')}`
+            ]
+            setGeneratedLogos(mockLogos)
+          }
+        } else {
+          throw new Error('API request failed')
+        }
+      } catch (error) {
+        console.error('Error generating logos:', error)
+        // Fallback to mock logos if API fails
         const mockLogos = [
-          `https://via.placeholder.com/200x100/2563eb/ffffff?text=Logo+1`,
-          `https://via.placeholder.com/200x100/059669/ffffff?text=Logo+2`,
-          `https://via.placeholder.com/200x100/dc2626/ffffff?text=Logo+3`,
-          `https://via.placeholder.com/200x100/7c3aed/ffffff?text=Logo+4`,
-          `https://via.placeholder.com/200x100/ea580c/ffffff?text=Logo+5`,
-          `https://via.placeholder.com/200x100/0891b2/ffffff?text=Logo+6`
+          `https://via.placeholder.com/300x300/2563eb/ffffff?text=${encodeURIComponent(domainInput || 'Logo 1')}`,
+          `https://via.placeholder.com/300x300/059669/ffffff?text=${encodeURIComponent(domainInput || 'Logo 2')}`,
+          `https://via.placeholder.com/300x300/dc2626/ffffff?text=${encodeURIComponent(domainInput || 'Logo 3')}`
         ]
         setGeneratedLogos(mockLogos)
+      } finally {
         setIsGeneratingLogos(false)
-      }, 2000) // 2 second simulation
+      }
     }
   }
 
