@@ -30,8 +30,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Domain name too short' }, { status: 400 })
     }
 
-    // Clean domain name - remove any existing extensions
-    const cleanDomain = domain.replace(/\.(com|net|org|io|co|app|dev|biz|info|tech)$/i, '')
+    // Clean domain name - remove any existing extensions and spaces/special characters
+    const cleanDomain = domain
+      .replace(/\.(com|net|org|io|co|app|dev|biz|info|tech)$/i, '')
+      .replace(/[^a-z0-9-]/g, '') // Remove all non-alphanumeric characters except hyphens
+      .replace(/--+/g, '-') // Replace multiple hyphens with single hyphen
+      .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
 
     if (cleanDomain.length < 2) {
       return NextResponse.json({ error: 'Domain name too short' }, { status: 400 })

@@ -26,7 +26,6 @@ export default function BuildMySitePage() {
   const [isSearching, setIsSearching] = useState(false)
   const [isClient, setIsClient] = useState(false)
   const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null)
-  const [logoInput, setLogoInput] = useState('')
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [logoAction, setLogoAction] = useState<'generate' | 'upload' | null>(null)
@@ -34,6 +33,7 @@ export default function BuildMySitePage() {
   const [generatedLogos, setGeneratedLogos] = useState<string[]>([])
   const [selectedLogoIndex, setSelectedLogoIndex] = useState<number | null>(null)
   const [showMoreLogos, setShowMoreLogos] = useState(false)
+  const [businessDescription, setBusinessDescription] = useState('')
 
   useEffect(() => {
     setIsClient(true)
@@ -62,7 +62,12 @@ export default function BuildMySitePage() {
   }
 
   const handleDomainInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\.[a-z]+$/i, '').toLowerCase()
+    const value = e.target.value
+      .replace(/\.[a-z]+$/i, '') // Remove domain extensions
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '') // Remove spaces and special characters
+      .replace(/--+/g, '-') // Replace multiple hyphens with single hyphen
+      .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
     setDomainInput(value)
 
     // Clear previous timeout
@@ -96,8 +101,8 @@ export default function BuildMySitePage() {
     }
   }
 
-  const handleLogoGenerate = async () => {
-    if (logoInput.trim()) {
+  const handleLogoGenerate = async (description: string, companyName: string) => {
+    if (description.trim()) {
       setIsGeneratingLogos(true)
       setLogoAction('generate')
 
@@ -108,10 +113,8 @@ export default function BuildMySitePage() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            businessDescription: logoInput,
-            companyName: domainInput,
-            logoStyle: 'modern',
-            colors: ['#2563eb', '#ffffff']
+            businessDescription: description,
+            companyName: companyName
           })
         })
 
@@ -122,42 +125,46 @@ export default function BuildMySitePage() {
             setGeneratedLogos(logoUrls)
           } else {
             console.error('Logo generation failed:', data.error)
-            // Fallback to mock logos if API fails
-            const mockLogos = [
-              `https://via.placeholder.com/300x300/2563eb/ffffff?text=${encodeURIComponent(domainInput || 'Logo 1')}`,
-              `https://via.placeholder.com/300x300/059669/ffffff?text=${encodeURIComponent(domainInput || 'Logo 2')}`,
-              `https://via.placeholder.com/300x300/dc2626/ffffff?text=${encodeURIComponent(domainInput || 'Logo 3')}`
-            ]
-            setGeneratedLogos(mockLogos)
+            setGeneratedLogos([])
           }
         } else {
           throw new Error('API request failed')
         }
       } catch (error) {
         console.error('Error generating logos:', error)
-        // Fallback to mock logos if API fails
-        const mockLogos = [
-          `https://via.placeholder.com/300x300/2563eb/ffffff?text=${encodeURIComponent(domainInput || 'Logo 1')}`,
-          `https://via.placeholder.com/300x300/059669/ffffff?text=${encodeURIComponent(domainInput || 'Logo 2')}`,
-          `https://via.placeholder.com/300x300/dc2626/ffffff?text=${encodeURIComponent(domainInput || 'Logo 3')}`
-        ]
-        setGeneratedLogos(mockLogos)
+        setGeneratedLogos([])
       } finally {
         setIsGeneratingLogos(false)
       }
     }
   }
 
+  // Auto-generate logos when business description changes
+  useEffect(() => {
+    if (businessDescription.trim().length > 10) {
+      const timeout = setTimeout(() => {
+        handleLogoGenerate(businessDescription, domainInput)
+      }, 1000) // 1 second delay after typing stops
+
+      return () => clearTimeout(timeout)
+    } else {
+      setGeneratedLogos([])
+      setSelectedLogoIndex(null)
+    }
+  }, [businessDescription, domainInput])
+
   const selectLogo = (index: number) => {
     setSelectedLogoIndex(index)
   }
 
-  const handleLogoInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setLogoInput(e.target.value)
-    // Reset file selection if user starts typing
-    if (e.target.value.trim()) {
+  const handleBusinessDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value
+    setBusinessDescription(value)
+    // Reset file selection if user types
+    if (value.trim()) {
       setLogoFile(null)
       setLogoPreview(null)
+      setLogoAction(null)
     }
   }
 
@@ -371,6 +378,8 @@ export default function BuildMySitePage() {
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Business Description & Website Purpose *</label>
                     <textarea
                       name="siteDescription"
+                      value={businessDescription}
+                      onChange={handleBusinessDescriptionChange}
                       required
                       rows={5}
                       placeholder="Describe your business, what your website should do, and your target audience. For example: 'ABC Construction LLC is a local contractor specializing in residential renovations for homeowners and property investors. We need a website to showcase our projects, get customer inquiries, and display our services. Our target audience includes local homeowners looking for renovations and real estate investors seeking reliable contractors.' OR paste a link to an existing site you'd like to replicate: 'Build a site exactly like https://example.com'"
@@ -486,89 +495,209 @@ export default function BuildMySitePage() {
 
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', borderBottom: '2px solid #e5e7eb', paddingBottom: '0.5rem', marginBottom: '1rem' }}>
-                    🎨 Logo Creation
+                    🎨 Logo Selection
                   </h3>
 
                   <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.75rem' }}>
-                      Describe your logo or upload an existing one *
-                    </label>
+                    {/* Auto-generated logos section */}
+                    {businessDescription.trim().length > 10 && (
+                      <div style={{ marginBottom: '1.5rem' }}>
+                        {isGeneratingLogos && (
+                          <div style={{
+                            padding: '1rem',
+                            background: '#f0f9ff',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #bfdbfe',
+                            textAlign: 'center',
+                            marginBottom: '1rem'
+                          }}>
+                            <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🤖</div>
+                            <div style={{ color: '#1e40af', fontWeight: '500' }}>Generating suggested logos...</div>
+                            <div style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                              Based on your business description
+                            </div>
+                          </div>
+                        )}
 
-                    <div style={{ marginBottom: '1rem' }}>
-                      <textarea
-                        value={logoInput}
-                        onChange={handleLogoInputChange}
-                        name="logoDescription"
-                        rows={4}
-                        placeholder="Describe your ideal logo (e.g., 'Modern minimalist logo for ABC Construction LLC with a hammer and house icon, blue and gray colors, professional feel') OR paste a link to your existing logo..."
+                        {generatedLogos.length > 0 && !isGeneratingLogos && (
+                          <div>
+                            <div style={{
+                              padding: '1rem',
+                              background: '#ecfdf5',
+                              borderRadius: '0.5rem',
+                              border: '1px solid #a7f3d0',
+                              marginBottom: '1rem'
+                            }}>
+                              <div style={{ color: '#065f46', fontWeight: '500', marginBottom: '0.5rem' }}>
+                                ✨ Suggested Logos - Choose your favorite:
+                              </div>
+                              <div style={{ fontSize: '0.875rem', color: '#047857' }}>
+                                Generated based on your business description
+                              </div>
+                            </div>
+
+                            <div style={{
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                              gap: '1rem',
+                              marginBottom: '1rem'
+                            }}>
+                              {generatedLogos.slice(0, showMoreLogos ? 6 : 3).map((logoUrl, index) => (
+                                <div
+                                  key={index}
+                                  onClick={() => selectLogo(index)}
+                                  style={{
+                                    cursor: 'pointer',
+                                    padding: '1rem',
+                                    border: selectedLogoIndex === index ? '3px solid #2563eb' : '2px solid #e5e7eb',
+                                    borderRadius: '0.75rem',
+                                    background: selectedLogoIndex === index ? '#eff6ff' : 'white',
+                                    transition: 'all 0.2s',
+                                    textAlign: 'center',
+                                    position: 'relative'
+                                  }}
+                                >
+                                  <img
+                                    src={logoUrl}
+                                    alt={`Suggested logo option ${index + 1}`}
+                                    style={{
+                                      width: '100%',
+                                      height: '80px',
+                                      objectFit: 'contain',
+                                      borderRadius: '0.5rem',
+                                      background: '#f9fafb'
+                                    }}
+                                  />
+                                  <div style={{
+                                    marginTop: '0.5rem',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500',
+                                    color: selectedLogoIndex === index ? '#2563eb' : '#374151'
+                                  }}>
+                                    Option {index + 1}
+                                  </div>
+                                  {selectedLogoIndex === index && (
+                                    <div style={{
+                                      position: 'absolute',
+                                      top: '0.5rem',
+                                      right: '0.5rem',
+                                      width: '1.5rem',
+                                      height: '1.5rem',
+                                      borderRadius: '50%',
+                                      background: '#2563eb',
+                                      color: 'white',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '0.75rem'
+                                    }}>
+                                      ✓
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+
+                            {generatedLogos.length > 3 && (
+                              <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                                <button
+                                  type="button"
+                                  onClick={() => setShowMoreLogos(!showMoreLogos)}
+                                  style={{
+                                    padding: '0.5rem 1rem',
+                                    background: '#f3f4f6',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '0.5rem',
+                                    fontSize: '0.875rem',
+                                    cursor: 'pointer',
+                                    color: '#374151'
+                                  }}
+                                >
+                                  {showMoreLogos ? 'Show Less Options' : 'Show More Options (3 more)'}
+                                </button>
+                              </div>
+                            )}
+
+                            {selectedLogoIndex !== null && (
+                              <div style={{
+                                padding: '0.75rem',
+                                background: '#eff6ff',
+                                borderRadius: '0.5rem',
+                                border: '1px solid #bfdbfe',
+                                fontSize: '0.875rem',
+                                color: '#1e40af',
+                                marginBottom: '1rem'
+                              }}>
+                                ✅ <strong>Selected:</strong> Logo Option {selectedLogoIndex + 1} - This will be used for your website
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '1rem',
+                          margin: '1.5rem 0',
+                          fontSize: '0.875rem',
+                          color: '#6b7280'
+                        }}>
+                          <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
+                          <span>OR</span>
+                          <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Upload existing logo section */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.75rem' }}>
+                        Upload your existing logo
+                      </label>
+
+                      <label
+                        htmlFor="logoFile"
                         style={{
-                          width: '100%',
-                          padding: '0.75rem',
-                          border: '1px solid #d1d5db',
+                          display: 'inline-block',
+                          padding: '0.75rem 1rem',
+                          background: 'white',
+                          border: '2px dashed #d1d5db',
                           borderRadius: '0.5rem',
-                          fontSize: '1rem',
-                          resize: 'none',
-                          marginBottom: '0.75rem'
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          width: '100%',
+                          transition: 'all 0.2s',
+                          fontSize: '0.875rem',
+                          color: '#374151'
                         }}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          e.preventDefault()
+                          const files = e.dataTransfer.files
+                          if (files[0]) {
+                            const syntheticEvent = {
+                              target: { files: [files[0]] }
+                            } as any
+                            handleFileUpload(syntheticEvent)
+                          }
+                        }}
+                      >
+                        📁 Click to upload or drag & drop your existing logo
+                        <br />
+                        <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                          PNG, JPG, SVG, or PDF (max 5MB)
+                        </span>
+                      </label>
+                      <input
+                        id="logoFile"
+                        type="file"
+                        onChange={handleFileUpload}
+                        accept="image/*,.pdf"
+                        style={{ display: 'none' }}
                       />
 
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        marginBottom: '1rem',
-                        fontSize: '0.875rem',
-                        color: '#6b7280'
-                      }}>
-                        <span>OR</span>
-                        <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
-                      </div>
-
-                      <div style={{ marginBottom: '1rem' }}>
-                        <label
-                          htmlFor="logoFile"
-                          style={{
-                            display: 'inline-block',
-                            padding: '0.75rem 1rem',
-                            background: 'white',
-                            border: '2px dashed #d1d5db',
-                            borderRadius: '0.5rem',
-                            cursor: 'pointer',
-                            textAlign: 'center',
-                            width: '100%',
-                            transition: 'all 0.2s',
-                            fontSize: '0.875rem',
-                            color: '#374151'
-                          }}
-                          onDragOver={(e) => e.preventDefault()}
-                          onDrop={(e) => {
-                            e.preventDefault()
-                            const files = e.dataTransfer.files
-                            if (files[0]) {
-                              const syntheticEvent = {
-                                target: { files: [files[0]] }
-                              } as any
-                              handleFileUpload(syntheticEvent)
-                            }
-                          }}
-                        >
-                          📁 Click to upload or drag & drop your existing logo
-                          <br />
-                          <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
-                            PNG, JPG, SVG, or PDF (max 5MB)
-                          </span>
-                        </label>
-                        <input
-                          id="logoFile"
-                          type="file"
-                          onChange={handleFileUpload}
-                          accept="image/*,.pdf"
-                          style={{ display: 'none' }}
-                        />
-                      </div>
-
                       {logoPreview && (
-                        <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+                        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
                           <img
                             src={logoPreview}
                             alt="Logo preview"
@@ -579,190 +708,30 @@ export default function BuildMySitePage() {
                               border: '1px solid #e5e7eb'
                             }}
                           />
-                          <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>
-                            ✅ Logo uploaded successfully
-                          </p>
-                        </div>
-                      )}
-
-                      <button
-                        type="button"
-                        onClick={handleLogoGenerate}
-                        disabled={!logoInput.trim() && !logoFile}
-                        style={{
-                          width: '100%',
-                          padding: '0.875rem',
-                          background: (logoInput.trim() || logoFile) ? '#2563eb' : '#9ca3af',
-                          color: 'white',
-                          borderRadius: '0.5rem',
-                          fontSize: '1rem',
-                          fontWeight: '600',
-                          border: 'none',
-                          cursor: (logoInput.trim() || logoFile) ? 'pointer' : 'not-allowed',
-                          transition: 'all 0.2s',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.5rem'
-                        }}
-                      >
-                        {logoFile ? '📁 Add Existing Logo' : '🤖 Generate Logo with AI'}
-                      </button>
-
-                      {isGeneratingLogos && (
-                        <div style={{
-                          marginTop: '1rem',
-                          padding: '1rem',
-                          background: '#f0f9ff',
-                          borderRadius: '0.5rem',
-                          border: '1px solid #bfdbfe',
-                          textAlign: 'center'
-                        }}>
-                          <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🤖</div>
-                          <div style={{ color: '#1e40af', fontWeight: '500' }}>Generating AI logos...</div>
-                          <div style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
-                            Creating custom logos based on: "{logoInput}"
-                          </div>
-                        </div>
-                      )}
-
-                      {generatedLogos.length > 0 && !isGeneratingLogos && (
-                        <div style={{ marginTop: '1rem' }}>
                           <div style={{
-                            padding: '1rem',
-                            background: '#ecfdf5',
+                            marginTop: '0.5rem',
+                            padding: '0.75rem',
+                            background: '#eff6ff',
                             borderRadius: '0.5rem',
-                            border: '1px solid #a7f3d0',
-                            marginBottom: '1rem'
+                            border: '1px solid #bfdbfe',
+                            fontSize: '0.875rem',
+                            color: '#1e40af'
                           }}>
-                            <div style={{ color: '#065f46', fontWeight: '500', marginBottom: '0.5rem' }}>
-                              ✨ AI Generated Logos - Choose your favorite:
-                            </div>
-                            <div style={{ fontSize: '0.875rem', color: '#047857' }}>
-                              Based on: "{logoInput}"
-                            </div>
-                          </div>
-
-                          <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                            gap: '1rem',
-                            marginBottom: '1rem'
-                          }}>
-                            {generatedLogos.slice(0, showMoreLogos ? 6 : 3).map((logoUrl, index) => (
-                              <div
-                                key={index}
-                                onClick={() => selectLogo(index)}
-                                style={{
-                                  cursor: 'pointer',
-                                  padding: '1rem',
-                                  border: selectedLogoIndex === index ? '3px solid #2563eb' : '2px solid #e5e7eb',
-                                  borderRadius: '0.75rem',
-                                  background: selectedLogoIndex === index ? '#eff6ff' : 'white',
-                                  transition: 'all 0.2s',
-                                  textAlign: 'center',
-                                  position: 'relative'
-                                }}
-                              >
-                                <img
-                                  src={logoUrl}
-                                  alt={`Generated logo option ${index + 1}`}
-                                  style={{
-                                    width: '100%',
-                                    height: '80px',
-                                    objectFit: 'contain',
-                                    borderRadius: '0.5rem',
-                                    background: '#f9fafb'
-                                  }}
-                                />
-                                <div style={{
-                                  marginTop: '0.5rem',
-                                  fontSize: '0.875rem',
-                                  fontWeight: '500',
-                                  color: selectedLogoIndex === index ? '#2563eb' : '#374151'
-                                }}>
-                                  Option {index + 1}
-                                </div>
-                                {selectedLogoIndex === index && (
-                                  <div style={{
-                                    position: 'absolute',
-                                    top: '0.5rem',
-                                    right: '0.5rem',
-                                    width: '1.5rem',
-                                    height: '1.5rem',
-                                    borderRadius: '50%',
-                                    background: '#2563eb',
-                                    color: 'white',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '0.75rem'
-                                  }}>
-                                    ✓
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-
-                          {generatedLogos.length > 3 && (
-                            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                              <button
-                                type="button"
-                                onClick={() => setShowMoreLogos(!showMoreLogos)}
-                                style={{
-                                  padding: '0.5rem 1rem',
-                                  background: '#f3f4f6',
-                                  border: '1px solid #d1d5db',
-                                  borderRadius: '0.5rem',
-                                  fontSize: '0.875rem',
-                                  cursor: 'pointer',
-                                  color: '#374151'
-                                }}
-                              >
-                                {showMoreLogos ? 'Show Less Options' : 'Show More Options (3 more)'}
-                              </button>
-                            </div>
-                          )}
-
-                          {selectedLogoIndex !== null && (
-                            <div style={{
-                              padding: '0.75rem',
-                              background: '#eff6ff',
-                              borderRadius: '0.5rem',
-                              border: '1px solid #bfdbfe',
-                              fontSize: '0.875rem',
-                              color: '#1e40af'
-                            }}>
-                              ✅ <strong>Selected:</strong> Logo Option {selectedLogoIndex + 1} - This will be used for your website
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {logoAction === 'upload' && logoFile && (
-                        <div style={{
-                          marginTop: '1rem',
-                          padding: '0.75rem',
-                          background: '#eff6ff',
-                          borderRadius: '0.5rem',
-                          border: '1px solid #bfdbfe',
-                          fontSize: '0.875rem'
-                        }}>
-                          <span style={{ color: '#1e40af' }}>
                             📁 <strong>Existing Logo:</strong> We'll use your uploaded logo file for your website
-                          </span>
+                          </div>
                         </div>
                       )}
                     </div>
 
-                    <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0 }}>
-                      💡 <strong>Tip:</strong> For AI generation, include your business name, preferred colors, style (modern, vintage, etc.), and any symbols or icons you'd like
-                    </p>
+                    {businessDescription.trim().length <= 10 && (
+                      <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: '1rem 0', fontStyle: 'italic' }}>
+                        💡 Complete your business description above to see suggested logo options
+                      </p>
+                    )}
 
                     {/* Hidden inputs for form submission */}
                     <input type="hidden" name="logoAction" value={logoAction || ''} />
-                    <input type="hidden" name="logoDescription" value={logoInput} />
+                    <input type="hidden" name="logoDescription" value={businessDescription} />
                     <input type="hidden" name="selectedLogoIndex" value={selectedLogoIndex !== null ? selectedLogoIndex.toString() : ''} />
                     <input type="hidden" name="selectedLogoUrl" value={selectedLogoIndex !== null ? generatedLogos[selectedLogoIndex] : ''} />
                   </div>
