@@ -217,114 +217,6 @@ export default function BuildMySitePage() {
             </div>
           ) : (
             <>
-              {/* Cost Breakdown Section */}
-              {selectedDomain && (
-                <div style={{ background: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', marginBottom: '2rem' }}>
-                  <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginBottom: '1.5rem', textAlign: 'center' }}>
-                    💰 Cost Breakdown
-                  </h3>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: 'clamp(1rem, 4vw, 2rem)' }}>
-                    {/* First Year Costs */}
-                    <div style={{ background: '#f8fafc', borderRadius: '0.5rem', padding: '1.5rem' }}>
-                      <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1e3a8a', marginBottom: '1rem' }}>
-                        💳 First Year Costs
-                      </h4>
-                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ color: '#374151' }}>Website Design & Development</span>
-                        <span style={{ fontWeight: '600', color: '#111827' }}>${websiteDesignCost}</span>
-                      </div>
-                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ color: '#374151' }}>Domain ({selectedDomain.domain})</span>
-                        <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontWeight: '600', color: '#111827' }}>${selectedDomain.yearlyPrice}/year</div>
-                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${domainMonthlyCost.toFixed(2)}/month)</div>
-                        </div>
-                      </div>
-                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ color: '#374151' }}>Hosting (First Year)</span>
-                        <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontWeight: '600', color: '#111827' }}>${hostingYearlyCost.toFixed(2)}/year</div>
-                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${hostingMonthlyCost}/month)</div>
-                        </div>
-                      </div>
-                      <div style={{ borderTop: '2px solid #e5e7eb', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.125rem', fontWeight: 'bold' }}>
-                          <span style={{ color: '#111827' }}>Total First Year</span>
-                          <span style={{ color: '#1e3a8a' }}>${totalOneTimeCost.toFixed(2)}</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                          <span style={{ color: '#6b7280' }}>Monthly equivalent</span>
-                          <span style={{ color: '#6b7280' }}>${totalMonthlyCost.toFixed(2)}/month</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Ongoing Costs */}
-                    <div style={{ background: '#f0f9ff', borderRadius: '0.5rem', padding: '1.5rem' }}>
-                      <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1e3a8a', marginBottom: '1rem' }}>
-                        🔄 Ongoing Costs (Year 2+)
-                      </h4>
-                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ color: '#374151' }}>Hosting & Maintenance</span>
-                        <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontWeight: '600', color: '#111827' }}>${hostingMonthlyCost}/month</div>
-                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${hostingYearlyCost.toFixed(2)}/year)</div>
-                        </div>
-                      </div>
-                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ color: '#374151' }}>Domain Renewal</span>
-                        <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontWeight: '600', color: '#111827' }}>${domainMonthlyCost.toFixed(2)}/month</div>
-                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${selectedDomain.yearlyPrice}/year)</div>
-                        </div>
-                      </div>
-                      <div style={{ borderTop: '2px solid #e5e7eb', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.125rem', fontWeight: 'bold' }}>
-                          <span style={{ color: '#111827' }}>Total Monthly</span>
-                          <span style={{ color: '#1e3a8a' }}>${totalMonthlyCost.toFixed(2)}/month</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                          <span style={{ color: '#6b7280' }}>Annual equivalent</span>
-                          <span style={{ color: '#6b7280' }}>${yearlyAfterFirstYear.toFixed(2)}/year</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 12-Month Breakdown */}
-                  <div style={{ marginTop: '2rem', background: '#fefce8', borderRadius: '0.5rem', padding: '1.5rem', border: '1px solid #fde047' }}>
-                    <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#a16207', marginBottom: '1rem', textAlign: 'center' }}>
-                      📊 12-Month Cost Summary
-                    </h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Year 1 Total</div>
-                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${totalOneTimeCost.toFixed(2)}</div>
-                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Design + Domain + Hosting</div>
-                      </div>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Monthly (Year 2+)</div>
-                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${totalMonthlyCost.toFixed(2)}</div>
-                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Hosting + Domain</div>
-                      </div>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Annual (Year 2+)</div>
-                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${yearlyAfterFirstYear.toFixed(2)}</div>
-                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Yearly renewal</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#ecfdf5', borderRadius: '0.5rem', border: '1px solid #a7f3d0' }}>
-                    <p style={{ color: '#065f46', fontSize: '0.875rem', margin: 0, textAlign: 'center' }}>
-                      ✅ <strong>What's Included:</strong> Professional design, mobile-responsive layout, basic SEO setup,
-                      contact forms, hosting, SSL certificate, and ongoing technical support.
-                    </p>
-                  </div>
-                </div>
-              )}
-
               <form action="/api/website-intake" method="POST" style={{ background: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}>
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                   <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Website Creation Request</h2>
@@ -738,8 +630,11 @@ export default function BuildMySitePage() {
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Additional Notes</label>
                   <textarea
                     name="additionalNotes"
-                    rows={3}
-                    placeholder="Any specific requirements, color preferences, features you'd like, or questions you have..."
+                    rows={4}
+                    placeholder="Any specific requirements, color preferences, features you'd like, or questions you have...
+
+• Do you need CRM integration (e.g., HubSpot, Salesforce, GoHighLevel)?
+• Any other integrations or special functionality?"
                     style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
                   />
                 </div>
@@ -768,6 +663,114 @@ export default function BuildMySitePage() {
                   We typically respond within 24-48 hours with a project quote and timeline.
                 </p>
               </form>
+
+              {/* Cost Breakdown Section - Moved after form */}
+              {selectedDomain && (
+                <div style={{ background: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', marginTop: '2rem' }}>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginBottom: '1.5rem', textAlign: 'center' }}>
+                    💰 Cost Breakdown
+                  </h3>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: 'clamp(1rem, 4vw, 2rem)' }}>
+                    {/* First Year Costs */}
+                    <div style={{ background: '#f8fafc', borderRadius: '0.5rem', padding: '1.5rem' }}>
+                      <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1e3a8a', marginBottom: '1rem' }}>
+                        💳 First Year Costs
+                      </h4>
+                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#374151' }}>Website Design & Development</span>
+                        <span style={{ fontWeight: '600', color: '#111827' }}>${websiteDesignCost}</span>
+                      </div>
+                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#374151' }}>Domain ({selectedDomain.domain})</span>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontWeight: '600', color: '#111827' }}>${selectedDomain.yearlyPrice}/year</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${domainMonthlyCost.toFixed(2)}/month)</div>
+                        </div>
+                      </div>
+                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#374151' }}>Hosting (First Year)</span>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontWeight: '600', color: '#111827' }}>${hostingYearlyCost.toFixed(2)}/year</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${hostingMonthlyCost}/month)</div>
+                        </div>
+                      </div>
+                      <div style={{ borderTop: '2px solid #e5e7eb', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.125rem', fontWeight: 'bold' }}>
+                          <span style={{ color: '#111827' }}>Total First Year</span>
+                          <span style={{ color: '#1e3a8a' }}>${totalOneTimeCost.toFixed(2)}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                          <span style={{ color: '#6b7280' }}>Monthly equivalent</span>
+                          <span style={{ color: '#6b7280' }}>${totalMonthlyCost.toFixed(2)}/month</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Ongoing Costs */}
+                    <div style={{ background: '#f0f9ff', borderRadius: '0.5rem', padding: '1.5rem' }}>
+                      <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1e3a8a', marginBottom: '1rem' }}>
+                        🔄 Ongoing Costs (Year 2+)
+                      </h4>
+                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#374151' }}>Hosting & Maintenance</span>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontWeight: '600', color: '#111827' }}>${hostingMonthlyCost}/month</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${hostingYearlyCost.toFixed(2)}/year)</div>
+                        </div>
+                      </div>
+                      <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#374151' }}>Domain Renewal</span>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontWeight: '600', color: '#111827' }}>${domainMonthlyCost.toFixed(2)}/month</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(${selectedDomain.yearlyPrice}/year)</div>
+                        </div>
+                      </div>
+                      <div style={{ borderTop: '2px solid #e5e7eb', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.125rem', fontWeight: 'bold' }}>
+                          <span style={{ color: '#111827' }}>Total Monthly</span>
+                          <span style={{ color: '#1e3a8a' }}>${totalMonthlyCost.toFixed(2)}/month</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                          <span style={{ color: '#6b7280' }}>Annual equivalent</span>
+                          <span style={{ color: '#6b7280' }}>${yearlyAfterFirstYear.toFixed(2)}/year</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 12-Month Breakdown */}
+                  <div style={{ marginTop: '2rem', background: '#fefce8', borderRadius: '0.5rem', padding: '1.5rem', border: '1px solid #fde047' }}>
+                    <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#a16207', marginBottom: '1rem', textAlign: 'center' }}>
+                      📊 12-Month Cost Summary
+                    </h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Year 1 Total</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${totalOneTimeCost.toFixed(2)}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Design + Domain + Hosting</div>
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Monthly (Year 2+)</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${totalMonthlyCost.toFixed(2)}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Hosting + Domain</div>
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.875rem', color: '#a16207', marginBottom: '0.25rem' }}>Annual (Year 2+)</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>${yearlyAfterFirstYear.toFixed(2)}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Yearly renewal</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#ecfdf5', borderRadius: '0.5rem', border: '1px solid #a7f3d0' }}>
+                    <p style={{ color: '#065f46', fontSize: '0.875rem', margin: 0, textAlign: 'center' }}>
+                      ✅ <strong>What's Included:</strong> Professional design, mobile-responsive layout, basic SEO setup,
+                      contact forms, hosting, SSL certificate, and ongoing technical support.
+                    </p>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
