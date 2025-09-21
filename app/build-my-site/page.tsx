@@ -181,7 +181,7 @@ export default function BuildMySitePage() {
       <div style={{ maxWidth: '64rem', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1 style={{ fontSize: 'clamp(2rem, 8vw, 3rem)', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>
-            Build My Website
+Professional Website Builder - Custom Sites for Any Business
           </h1>
         </div>
 
@@ -189,19 +189,19 @@ export default function BuildMySitePage() {
           <div style={{ background: 'white', borderRadius: '0.5rem', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', textAlign: 'center' }}>
             <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🌐</div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Domain & Hosting</h3>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>We'll help you secure the perfect domain name and set up reliable hosting</p>
+            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Secure your perfect domain and reliable hosting for your business</p>
           </div>
 
           <div style={{ background: 'white', borderRadius: '0.5rem', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', textAlign: 'center' }}>
             <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🎨</div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Custom Design</h3>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Professional design tailored to your business and target audience</p>
+            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Professional website design tailored to your industry and business needs</p>
           </div>
 
           <div style={{ background: 'white', borderRadius: '0.5rem', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', textAlign: 'center' }}>
             <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🚀</div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Quick Launch</h3>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Fast turnaround to get your website live and generating results</p>
+            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Fast turnaround to get your business online and attracting customers</p>
           </div>
         </div>
 
