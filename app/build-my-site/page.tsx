@@ -65,9 +65,6 @@ export default function BuildMySitePage() {
     const value = e.target.value
       .replace(/\.[a-z]+$/i, '') // Remove domain extensions
       .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '') // Remove spaces and special characters
-      .replace(/--+/g, '-') // Replace multiple hyphens with single hyphen
-      .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
     setDomainInput(value)
 
     // Clear previous timeout
