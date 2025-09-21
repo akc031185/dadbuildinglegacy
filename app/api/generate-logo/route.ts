@@ -59,27 +59,169 @@ function generateSVGLogos(companyName: string, businessType: string): any[] {
 
   const typeColors = colors[businessType as keyof typeof colors] || colors.business
 
+  // Industry-specific icons and graphics
+  const industryIcons = {
+    technology: {
+      icon: `<circle cx="75" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="2"/>
+             <path d="M60 50h30M75 35v30" stroke="currentColor" stroke-width="2"/>
+             <circle cx="60" cy="40" r="3" fill="currentColor"/>
+             <circle cx="90" cy="60" r="3" fill="currentColor"/>`,
+      shape: `<rect x="20" y="30" width="60" height="40" rx="5" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>`
+    },
+    health: {
+      icon: `<path d="M75 35v30M60 50h30" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+             <circle cx="75" cy="50" r="22" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>`,
+      shape: `<ellipse cx="40" cy="45" rx="8" ry="12" fill="currentColor" opacity="0.1"/>`
+    },
+    food: {
+      icon: `<path d="M65 35c-5 0-10 5-10 10v20h20V45c0-5-5-10-10-10z" fill="currentColor" opacity="0.7"/>
+             <path d="M85 40v25h3c2 0 4-2 4-4V44c0-2-2-4-4-4h-3z" fill="currentColor"/>
+             <circle cx="45" cy="45" r="8" fill="none" stroke="currentColor" stroke-width="2"/>`,
+      shape: `<path d="M25 55c0-10 10-20 20-20s20 10 20 20" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>`
+    },
+    finance: {
+      icon: `<path d="M45 55L60 40L75 50L90 35" stroke="currentColor" stroke-width="2.5" fill="none"/>
+             <circle cx="60" cy="40" r="3" fill="currentColor"/>
+             <circle cx="75" cy="50" r="3" fill="currentColor"/>
+             <rect x="35" y="50" width="5" height="15" fill="currentColor" opacity="0.6"/>`,
+      shape: `<rect x="25" y="30" width="50" height="35" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.2"/>`
+    },
+    construction: {
+      icon: `<rect x="55" y="45" width="25" height="3" fill="currentColor"/>
+             <path d="M55 48L65 35L75 48" stroke="currentColor" stroke-width="2" fill="none"/>
+             <rect x="45" y="55" width="20" height="8" fill="currentColor" opacity="0.7"/>`,
+      shape: `<polygon points="30,60 50,35 70,60" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>`
+    },
+    creative: {
+      icon: `<circle cx="65" cy="45" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+             <path d="M75 40c5 0 10 5 10 10s-5 10-10 10" fill="none" stroke="currentColor" stroke-width="2"/>
+             <circle cx="50" cy="55" r="4" fill="currentColor" opacity="0.6"/>`,
+      shape: `<path d="M35 35c10-5 20 0 25 10c5-10 15-15 25-10" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>`
+    },
+    business: {
+      icon: `<rect x="60" y="35" width="15" height="25" fill="currentColor" opacity="0.7"/>
+             <rect x="45" y="45" width="12" height="15" fill="currentColor" opacity="0.5"/>
+             <rect x="78" y="42" width="10" height="18" fill="currentColor" opacity="0.6"/>`,
+      shape: `<rect x="30" y="30" width="40" height="30" rx="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0.2"/>`
+    }
+  }
+
+  const icons = industryIcons[businessType as keyof typeof industryIcons] || industryIcons.business
+
   const styles = [
-    { name: 'minimalist', bg: typeColors[0], text: '#ffffff', font: 'Arial, sans-serif', size: '24', weight: '400', transform: 'uppercase', spacing: '2px' },
-    { name: 'modern', bg: typeColors[1], text: '#ffffff', font: 'Helvetica, sans-serif', size: '28', weight: '600', transform: 'capitalize', spacing: '1px' },
-    { name: 'geometric', bg: '#ffffff', text: typeColors[0], font: 'Arial, sans-serif', size: '26', weight: '700', transform: 'uppercase', spacing: '3px', border: typeColors[0] },
-    { name: 'elegant', bg: '#f8fafc', text: '#1e293b', font: 'Georgia, serif', size: '24', weight: '400', transform: 'capitalize', spacing: '1px' },
-    { name: 'bold', bg: typeColors[2], text: '#ffffff', font: 'Arial Black, sans-serif', size: '32', weight: '900', transform: 'uppercase', spacing: '2px' },
-    { name: 'sophisticated', bg: '#1f2937', text: '#ffffff', font: 'Times, serif', size: '22', weight: '500', transform: 'capitalize', spacing: '1px' }
+    {
+      name: 'minimalist',
+      bg: `linear-gradient(135deg, ${typeColors[0]}, ${typeColors[1]})`,
+      text: '#ffffff',
+      font: 'Arial, sans-serif',
+      size: '20',
+      weight: '400',
+      transform: 'uppercase',
+      spacing: '2px',
+      textY: '130'
+    },
+    {
+      name: 'modern',
+      bg: `linear-gradient(45deg, ${typeColors[1]}, ${typeColors[0]})`,
+      text: '#ffffff',
+      font: 'Helvetica, sans-serif',
+      size: '22',
+      weight: '600',
+      transform: 'capitalize',
+      spacing: '1px',
+      textY: '130'
+    },
+    {
+      name: 'geometric',
+      bg: '#ffffff',
+      text: typeColors[0],
+      font: 'Arial, sans-serif',
+      size: '20',
+      weight: '700',
+      transform: 'uppercase',
+      spacing: '3px',
+      border: typeColors[0],
+      textY: '130'
+    },
+    {
+      name: 'elegant',
+      bg: `radial-gradient(circle, #f8fafc, #e2e8f0)`,
+      text: '#1e293b',
+      font: 'Georgia, serif',
+      size: '22',
+      weight: '400',
+      transform: 'capitalize',
+      spacing: '1px',
+      textY: '130'
+    },
+    {
+      name: 'bold',
+      bg: `linear-gradient(90deg, ${typeColors[2]}, ${typeColors[0]})`,
+      text: '#ffffff',
+      font: 'Arial Black, sans-serif',
+      size: '18',
+      weight: '900',
+      transform: 'uppercase',
+      spacing: '2px',
+      textY: '130'
+    },
+    {
+      name: 'sophisticated',
+      bg: `linear-gradient(180deg, #1f2937, #374151)`,
+      text: '#ffffff',
+      font: 'Times, serif',
+      size: '20',
+      weight: '500',
+      transform: 'capitalize',
+      spacing: '1px',
+      textY: '130'
+    }
   ]
 
   return styles.map((style, index) => {
-    const shortName = companyName.length > 20 ? companyName.substring(0, 20) + '...' : companyName
+    const shortName = companyName.length > 18 ? companyName.substring(0, 18) + '...' : companyName
+    const iconColor = style.text
 
     const svgContent = `
-      <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
-        <rect width="300" height="200" fill="${style.bg}" ${style.border ? `stroke="${style.border}" stroke-width="3"` : ''} rx="8"/>
-        <text x="150" y="100" text-anchor="middle" dominant-baseline="middle"
+      <svg width="300" height="160" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad${index}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:${typeColors[0]};stop-opacity:1" />
+            <stop offset="100%" style="stop-color:${typeColors[1]};stop-opacity:1" />
+          </linearGradient>
+          <radialGradient id="radial${index}" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+          </radialGradient>
+        </defs>
+
+        <rect width="300" height="160" fill="${style.bg.includes('gradient') ? `url(#${style.bg.includes('radial') ? 'radial' : 'grad'}${index})` : style.bg}" ${style.border ? `stroke="${style.border}" stroke-width="3"` : ''} rx="12"/>
+
+        <!-- Industry Icon -->
+        <g transform="translate(75, 25)" fill="${iconColor}" stroke="${iconColor}" opacity="0.9">
+          ${icons.icon}
+        </g>
+
+        <!-- Background Shape -->
+        <g transform="translate(0, 0)" fill="${iconColor}" stroke="${iconColor}">
+          ${icons.shape}
+        </g>
+
+        <!-- Company Name -->
+        <text x="150" y="${style.textY || '130'}" text-anchor="middle" dominant-baseline="middle"
               fill="${style.text}" font-family="${style.font}" font-size="${style.size}"
               font-weight="${style.weight}" letter-spacing="${style.spacing}"
               style="text-transform: ${style.transform};">
           ${shortName}
         </text>
+
+        <!-- Decorative Elements -->
+        ${index % 2 === 0 ?
+          `<circle cx="250" cy="30" r="15" fill="${style.text}" opacity="0.1"/>
+           <circle cx="50" cy="140" r="8" fill="${style.text}" opacity="0.15"/>` :
+          `<rect x="220" y="20" width="25" height="25" rx="3" fill="${style.text}" opacity="0.1"/>
+           <circle cx="30" cy="130" r="12" fill="${style.text}" opacity="0.1"/>`
+        }
       </svg>
     `.trim()
 
@@ -88,9 +230,9 @@ function generateSVGLogos(companyName: string, businessType: string): any[] {
     return {
       id: index + 1,
       style: style.name,
-      description: `${style.name.charAt(0).toUpperCase() + style.name.slice(1)} design`,
+      description: `${style.name.charAt(0).toUpperCase() + style.name.slice(1)} design with ${businessType} elements`,
       url: dataUrl,
-      fallback: false // These are proper generated logos, not external placeholders
+      fallback: false
     }
   })
 }
