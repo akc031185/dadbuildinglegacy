@@ -34,9 +34,25 @@ export default function BuildMySitePage() {
   const [selectedLogoIndex, setSelectedLogoIndex] = useState<number | null>(null)
   const [showMoreLogos, setShowMoreLogos] = useState(false)
   const [businessDescription, setBusinessDescription] = useState('')
+  const [additionalNotes, setAdditionalNotes] = useState('')
+  const [isListeningBusiness, setIsListeningBusiness] = useState(false)
+  const [isListeningNotes, setIsListeningNotes] = useState(false)
+  const [recognition, setRecognition] = useState<any>(null)
 
   useEffect(() => {
     setIsClient(true)
+
+    // Initialize speech recognition
+    if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      const recognitionInstance = new SpeechRecognition()
+
+      recognitionInstance.continuous = false
+      recognitionInstance.interimResults = false
+      recognitionInstance.lang = 'en-US'
+
+      setRecognition(recognitionInstance)
+    }
   }, [])
 
   const searchDomains = async (domainName: string) => {
@@ -154,6 +170,65 @@ export default function BuildMySitePage() {
     setSelectedLogoIndex(index)
   }
 
+  const startVoiceRecognition = (field: 'business' | 'notes') => {
+    if (!recognition) {
+      alert('Voice recognition is not supported in this browser. Please try Chrome, Safari, or Edge.')
+      return
+    }
+
+    const currentText = field === 'business' ? businessDescription : additionalNotes
+
+    recognition.onstart = () => {
+      if (field === 'business') {
+        setIsListeningBusiness(true)
+      } else {
+        setIsListeningNotes(true)
+      }
+    }
+
+    recognition.onend = () => {
+      if (field === 'business') {
+        setIsListeningBusiness(false)
+      } else {
+        setIsListeningNotes(false)
+      }
+    }
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript
+      const newText = currentText ? `${currentText} ${transcript}` : transcript
+
+      if (field === 'business') {
+        setBusinessDescription(newText)
+      } else {
+        setAdditionalNotes(newText)
+      }
+    }
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error)
+      if (field === 'business') {
+        setIsListeningBusiness(false)
+      } else {
+        setIsListeningNotes(false)
+      }
+
+      if (event.error === 'not-allowed') {
+        alert('Please allow microphone access to use voice input.')
+      } else {
+        alert('Voice recognition failed. Please try again.')
+      }
+    }
+
+    recognition.start()
+  }
+
+  const stopVoiceRecognition = () => {
+    if (recognition) {
+      recognition.stop()
+    }
+  }
+
   const handleBusinessDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
     setBusinessDescription(value)
@@ -260,17 +335,66 @@ Professional Website Builder - Custom Sites for Any Business
                   <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', borderBottom: '2px solid #e5e7eb', paddingBottom: '0.5rem', marginBottom: '1rem' }}>Website Details</h3>
 
                   <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Business Description & Website Purpose *</label>
-                    <textarea
-                      name="siteDescription"
-                      value={businessDescription}
-                      onChange={handleBusinessDescriptionChange}
-                      required
-                      rows={5}
-                      placeholder="Describe your business, what your website should do, and your target audience. For example: 'ABC Construction LLC is a local contractor specializing in residential renovations for homeowners and property investors. We need a website to showcase our projects, get customer inquiries, and display our services. Our target audience includes local homeowners looking for renovations and real estate investors seeking reliable contractors.' OR paste a link to an existing site you'd like to replicate: 'Build a site exactly like https://example.com'"
-                      title="Describe your business and website goals, OR paste a URL of an existing website you'd like to replicate"
-                      style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
-                    />
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                      Business Description & Website Purpose *
+                      <button
+                        type="button"
+                        onClick={() => isListeningBusiness ? stopVoiceRecognition() : startVoiceRecognition('business')}
+                        style={{
+                          marginLeft: '0.5rem',
+                          padding: '0.25rem 0.5rem',
+                          backgroundColor: isListeningBusiness ? '#dc2626' : '#3b82f6',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '0.375rem',
+                          fontSize: '0.75rem',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.25rem'
+                        }}
+                        title={isListeningBusiness ? 'Stop voice input' : 'Start voice input'}
+                      >
+                        🎤 {isListeningBusiness ? 'Stop' : 'Voice'}
+                      </button>
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                      <textarea
+                        name="siteDescription"
+                        value={businessDescription}
+                        onChange={handleBusinessDescriptionChange}
+                        required
+                        rows={5}
+                        placeholder="Describe your business, what your website should do, and your target audience. For example: 'ABC Construction LLC is a local contractor specializing in residential renovations for homeowners and property investors. We need a website to showcase our projects, get customer inquiries, and display our services. Our target audience includes local homeowners looking for renovations and real estate investors seeking reliable contractors.' OR paste a link to an existing site you'd like to replicate: 'Build a site exactly like https://example.com'"
+                        title="Describe your business and website goals, OR paste a URL of an existing website you'd like to replicate"
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: isListeningBusiness ? '2px solid #3b82f6' : '1px solid #d1d5db',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          resize: 'none',
+                          backgroundColor: isListeningBusiness ? '#eff6ff' : 'white'
+                        }}
+                      />
+                      {isListeningBusiness && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '0.5rem',
+                          right: '0.5rem',
+                          backgroundColor: '#3b82f6',
+                          color: 'white',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '0.25rem',
+                          fontSize: '0.75rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.25rem'
+                        }}>
+                          🔴 Listening...
+                        </div>
+                      )}
+                    </div>
                     <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
                       💡 <strong>Tip:</strong> Include your business type, company/LLC name, services, target audience, and website goals. <strong>Or simply paste a URL</strong> of an existing website you'd like to replicate (e.g., "Build exactly like https://example.com").
                     </p>
@@ -623,16 +747,67 @@ Professional Website Builder - Custom Sites for Any Business
                 </div>
 
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>Additional Notes</label>
-                  <textarea
-                    name="additionalNotes"
-                    rows={4}
-                    placeholder="Any specific requirements, color preferences, features you'd like, or questions you have...
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                    Additional Notes
+                    <button
+                      type="button"
+                      onClick={() => isListeningNotes ? stopVoiceRecognition() : startVoiceRecognition('notes')}
+                      style={{
+                        marginLeft: '0.5rem',
+                        padding: '0.25rem 0.5rem',
+                        backgroundColor: isListeningNotes ? '#dc2626' : '#3b82f6',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '0.375rem',
+                        fontSize: '0.75rem',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem'
+                      }}
+                      title={isListeningNotes ? 'Stop voice input' : 'Start voice input'}
+                    >
+                      🎤 {isListeningNotes ? 'Stop' : 'Voice'}
+                    </button>
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <textarea
+                      name="additionalNotes"
+                      value={additionalNotes}
+                      onChange={(e) => setAdditionalNotes(e.target.value)}
+                      rows={4}
+                      placeholder="Any specific requirements, color preferences, features you'd like, or questions you have...
 
 • Do you need CRM integration (e.g., HubSpot, Salesforce, GoHighLevel)?
 • Any other integrations or special functionality?"
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', fontSize: '1rem', resize: 'none' }}
-                  />
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: isListeningNotes ? '2px solid #3b82f6' : '1px solid #d1d5db',
+                        borderRadius: '0.5rem',
+                        fontSize: '1rem',
+                        resize: 'none',
+                        backgroundColor: isListeningNotes ? '#eff6ff' : 'white'
+                      }}
+                    />
+                    {isListeningNotes && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '0.5rem',
+                        right: '0.5rem',
+                        backgroundColor: '#3b82f6',
+                        color: 'white',
+                        padding: '0.25rem 0.5rem',
+                        borderRadius: '0.25rem',
+                        fontSize: '0.75rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.25rem'
+                      }}>
+                        🔴 Listening...
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <button
@@ -656,7 +831,6 @@ Professional Website Builder - Custom Sites for Any Business
 
                 <p style={{ fontSize: '0.875rem', color: '#6b7280', textAlign: 'center', marginTop: '1rem' }}>
                   By submitting this form, you agree to our Terms of Service and Privacy Policy.
-                  We typically respond within 24-48 hours with a project quote and timeline.
                 </p>
               </form>
 
