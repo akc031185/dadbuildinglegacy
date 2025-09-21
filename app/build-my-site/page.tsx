@@ -183,10 +183,6 @@ export default function BuildMySitePage() {
           <h1 style={{ fontSize: 'clamp(2rem, 8vw, 3rem)', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>
             Build My Website
           </h1>
-          <p style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)', color: '#6b7280', maxWidth: '32rem', margin: '0 auto' }}>
-            Professional website creation for your business. From domain selection to logo design,
-            we'll handle everything to get your online presence up and running.
-          </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', gap: 'clamp(1rem, 4vw, 2rem)', marginBottom: 'clamp(2rem, 6vw, 3rem)' }}>
